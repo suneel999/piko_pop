@@ -28,7 +28,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y apache2 mysql-server git unzip curl software-properties-common ca-certificates
+apt-get install -y apache2 mariadb-server git unzip curl software-properties-common ca-certificates
 
 # Node.js 20 (Tailwind build on server)
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
@@ -42,7 +42,8 @@ apt-get install -y \
   php8.2-curl php8.2-zip php8.2-gd php8.2-intl libapache2-mod-php8.2
 
 a2enmod rewrite headers ssl
-systemctl enable apache2 mysql
+systemctl enable apache2 mariadb
+systemctl start mariadb
 
 # Composer
 if ! command -v composer >/dev/null 2>&1; then
