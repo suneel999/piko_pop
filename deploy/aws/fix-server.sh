@@ -68,8 +68,10 @@ composer install --no-interaction --no-dev --optimize-autoloader 2>/dev/null || 
 npm ci 2>/dev/null && npm run build:css 2>/dev/null || true
 
 mkdir -p uploads tmp application/cache application/logs
-chown -R ${APP_USER}:${APP_USER} uploads tmp application/cache application/logs
-chmod -R 775 uploads tmp application/cache application/logs
+chown -R ubuntu:www-data "${APP_DIR}"
+find "${APP_DIR}" -type d -exec chmod 775 {} \;
+find "${APP_DIR}" -type f -exec chmod 664 {} \;
+chmod 600 .env 2>/dev/null || true
 
 cat > .env <<EOF
 APP_ENV=staging
