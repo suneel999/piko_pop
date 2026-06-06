@@ -38,18 +38,30 @@ jobs:
           SSH_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           DEPLOY_PATH: ${{ secrets.AWS_PRODUCTION_PATH || '/var/www/piko_pop' }}
         run: |
+          set -euo pipefail
+
           if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ]; then
             echo "Skip deploy: AWS_PRODUCTION_HOST, AWS_PRODUCTION_USER, or AWS_SSH_PRIVATE_KEY not set."
-            echo "Build succeeded. Add GitHub secrets after AWS server is ready."
             exit 0
           fi
 
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
+          echo "Testing SSH connection..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes \
+            "${SSH_USER}@${SSH_HOST}" "echo SSH OK && whoami"
+
+          echo "Preparing deploy permissions..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${SSH_HOST}" \
+            "sudo mkdir -p ${DEPLOY_PATH} && sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}"
+
+          echo "Syncing files..."
           rsync -avz --delete \
+            --rsync-path="sudo rsync" \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             --exclude '.git' \
             --exclude '.github' \
@@ -64,6 +76,9 @@ jobs:
             --exclude 'zbit_local' \
             ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
 
+          echo "Running post-deploy..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             "${SSH_USER}@${SSH_HOST}" \
-            "bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"
+            "sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"
+
+          echo "Deploy finished successfully."
