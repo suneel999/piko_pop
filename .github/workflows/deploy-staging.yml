@@ -1,4 +1,4 @@
-name: Deploy Staging
+name: Deploy Staging (AWS)
 
 on:
   push:
@@ -31,24 +31,39 @@ jobs:
       - name: Build Tailwind CSS
         run: npm run build:css
 
-      - name: Deploy to staging (FTP)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.FTP_STAGING_HOST }}
-          username: ${{ secrets.FTP_STAGING_USER }}
-          password: ${{ secrets.FTP_STAGING_PASSWORD }}
-          port: ${{ secrets.FTP_STAGING_PORT || 21 }}
-          protocol: ftp
-          server-dir: ${{ secrets.FTP_STAGING_DIR || '/public_html/' }}
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/node_modules/**
-            **/.env
-            **/deploy/deploy.config.json
-            **/deploy/*.zip
-            **/tmp/**
-            **/application/logs/**
-            **/uploads/**
-            **/.claude/**
-            **/zbit_local/**
+      - name: Deploy to AWS staging (SSH/rsync)
+        env:
+          SSH_HOST: ${{ secrets.AWS_STAGING_HOST }}
+          SSH_USER: ${{ secrets.AWS_STAGING_USER }}
+          SSH_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+          DEPLOY_PATH: ${{ secrets.AWS_STAGING_PATH || '/var/www/piko_pop' }}
+        run: |
+          if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ]; then
+            echo "Skip deploy: AWS_STAGING_HOST, AWS_STAGING_USER, or AWS_SSH_PRIVATE_KEY not set."
+            echo "Build succeeded. Add GitHub secrets after AWS server is ready."
+            exit 0
+          fi
+
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'node_modules' \
+            --exclude '.env' \
+            --exclude 'deploy/deploy.config.json' \
+            --exclude 'deploy/*.zip' \
+            --exclude 'tmp/' \
+            --exclude 'application/logs/' \
+            --exclude 'uploads/' \
+            --exclude '.claude' \
+            --exclude 'zbit_local' \
+            ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
+
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${SSH_HOST}" \
+            "bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"

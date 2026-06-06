@@ -14,10 +14,11 @@ function Show-Help {
     Write-Host '  .\scripts\dev.ps1 package  Build FTP upload zip (branding files)'
     Write-Host '  .\scripts\dev.ps1 status   Show environment + git status'
     Write-Host ''
-    Write-Host 'Workflow:'
-    Write-Host '  local branch  -> XAMPP test (APP_ENV=local in .env)'
-    Write-Host '  staging branch -> push -> auto deploy pp.zbit.ltd'
-    Write-Host '  main branch    -> push -> auto deploy pikopop.in'
+    Write-Host 'Workflow (AWS):'
+    Write-Host '  local   -> XAMPP (APP_ENV=local)'
+    Write-Host '  staging -> git push -> GitHub Actions -> AWS staging server'
+    Write-Host '  main    -> git push -> GitHub Actions -> AWS production server'
+    Write-Host '  Setup: deploy/aws/bootstrap-ubuntu.sh on fresh Lightsail/EC2'
 }
 
 function Invoke-Build {
