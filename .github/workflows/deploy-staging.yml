@@ -59,6 +59,11 @@ jobs:
             "${SSH_USER}@${SSH_HOST}" \
             "sudo mkdir -p ${DEPLOY_PATH} && sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}"
 
+          echo "Backing up server .env (never overwrite from git)..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${SSH_HOST}" \
+            "if [ -f ${DEPLOY_PATH}/.env ]; then sudo cp ${DEPLOY_PATH}/.env ${DEPLOY_PATH}/.env.deploybak; fi"
+
           echo "Syncing files..."
           rsync -avz --delete \
             --rsync-path="sudo rsync" \
@@ -75,6 +80,11 @@ jobs:
             --exclude '.claude' \
             --exclude 'zbit_local' \
             ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
+
+          echo "Restoring server .env if needed..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            "${SSH_USER}@${SSH_HOST}" \
+            "if [ ! -f ${DEPLOY_PATH}/.env ] && [ -f ${DEPLOY_PATH}/.env.deploybak ]; then sudo cp ${DEPLOY_PATH}/.env.deploybak ${DEPLOY_PATH}/.env; fi"
 
           echo "Running post-deploy..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
