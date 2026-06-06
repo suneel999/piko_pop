@@ -1,0 +1,54 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Build Tailwind CSS
+        run: npm run build:css
+
+      - name: Deploy to staging (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_STAGING_HOST }}
+          username: ${{ secrets.FTP_STAGING_USER }}
+          password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          port: ${{ secrets.FTP_STAGING_PORT || 21 }}
+          protocol: ftp
+          server-dir: ${{ secrets.FTP_STAGING_DIR || '/public_html/' }}
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/node_modules/**
+            **/.env
+            **/deploy/deploy.config.json
+            **/deploy/*.zip
+            **/tmp/**
+            **/application/logs/**
+            **/uploads/**
+            **/.claude/**
+            **/zbit_local/**

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="none" role="img" aria-label="PIKO POP">
+  <text x="0" y="42" font-family="Fredoka, Nunito, Arial Rounded MT Bold, sans-serif" font-size="38" font-weight="700" letter-spacing="-0.5">
+    <tspan fill="#FFFFFF">PIKO</tspan><tspan fill="#FFD83D"> POP</tspan>
+  </text>
+  <circle cx="208" cy="14" r="6" fill="#FFD83D"/>
+  <circle cx="222" cy="24" r="4" fill="#20BDF7"/>
+  <circle cx="214" cy="36" r="3" fill="#FF4FA3"/>
+</svg>

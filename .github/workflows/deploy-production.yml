@@ -1,0 +1,54 @@
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Build Tailwind CSS
+        run: npm run build:css
+
+      - name: Deploy to production (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_PRODUCTION_HOST }}
+          username: ${{ secrets.FTP_PRODUCTION_USER }}
+          password: ${{ secrets.FTP_PRODUCTION_PASSWORD }}
+          port: ${{ secrets.FTP_PRODUCTION_PORT || 21 }}
+          protocol: ftp
+          server-dir: ${{ secrets.FTP_PRODUCTION_DIR || '/public_html/' }}
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/node_modules/**
+            **/.env
+            **/deploy/deploy.config.json
+            **/deploy/*.zip
+            **/tmp/**
+            **/application/logs/**
+            **/uploads/**
+            **/.claude/**
+            **/zbit_local/**

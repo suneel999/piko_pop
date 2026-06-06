@@ -1,0 +1,24 @@
+{
+  "staging": {
+    "label": "Staging (pp.zbit.ltd)",
+    "url": "https://pp.zbit.ltd/",
+    "protocol": "ftp",
+    "host": "ftp.your-host.com",
+    "port": 21,
+    "username": "your-ftp-user",
+    "password": "your-ftp-password",
+    "remotePath": "/public_html/",
+    "passive": true
+  },
+  "production": {
+    "label": "Production (pikopop.in)",
+    "url": "https://pikopop.in/",
+    "protocol": "ftp",
+    "host": "ftp.your-host.com",
+    "port": 21,
+    "username": "your-ftp-user",
+    "password": "your-ftp-password",
+    "remotePath": "/public_html/",
+    "passive": true
+  }
+}
