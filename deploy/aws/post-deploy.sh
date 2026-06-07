@@ -5,7 +5,8 @@ set -euo pipefail
 APP_DIR="${APP_DIR:-/var/www/piko_pop}"
 cd "$APP_DIR"
 
-composer install --no-interaction --no-dev --optimize-autoloader 2>/dev/null || true
+# Skip composer on small instances (vendor is committed). Avoids OOM on 1GB RAM.
+# composer install --no-interaction --no-dev --optimize-autoloader 2>/dev/null || true
 
 mkdir -p uploads tmp application/cache application/logs
 

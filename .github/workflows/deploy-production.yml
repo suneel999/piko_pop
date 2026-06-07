@@ -25,12 +25,12 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Validate CSS build
+      - name: Build Tailwind CSS
         run: |
           npm ci
           npm run build:css
 
-      - name: Deploy to AWS production (git pull)
+      - name: Deploy to AWS production
         env:
           SSH_HOST: ${{ secrets.AWS_PRODUCTION_HOST }}
           SSH_USER: ${{ secrets.AWS_PRODUCTION_USER }}
@@ -40,7 +40,7 @@ jobs:
           set -euo pipefail
 
           if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$SSH_KEY" ]; then
-            echo "Skip deploy: AWS_PRODUCTION_HOST, AWS_PRODUCTION_USER, or AWS_SSH_PRIVATE_KEY not set."
+            echo "Skip deploy: secrets not set."
             exit 0
           fi
 
@@ -49,11 +49,11 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes \
-            "${SSH_USER}@${SSH_HOST}" "echo SSH OK"
+          SSH_OPTS="-i ~/.ssh/deploy_key -o StrictHostKeyChecking=no"
 
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${SSH_HOST}" \
+          ssh $SSH_OPTS "${SSH_USER}@${SSH_HOST}" "echo SSH OK"
+
+          ssh $SSH_OPTS "${SSH_USER}@${SSH_HOST}" \
             "set -euo pipefail
              sudo mkdir -p ${DEPLOY_PATH}
              sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}
@@ -64,8 +64,12 @@ jobs:
              git remote set-url origin https://github.com/suneel999/piko_pop.git
              git fetch origin main
              git checkout main
-             git reset --hard origin/main
-             npm ci
-             npm run build:css
-             sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh
-             echo Deploy complete."
+             git reset --hard origin/main"
+
+          scp $SSH_OPTS user_assets/css/output.css \
+            "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/user_assets/css/output.css"
+
+          ssh $SSH_OPTS "${SSH_USER}@${SSH_HOST}" \
+            "sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"
+
+          echo "Deploy finished successfully."
