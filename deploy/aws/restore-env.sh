@@ -10,6 +10,7 @@ DB_DATABASE=pakodi_and_politics
 DB_USERNAME=pikopop
 DB_PASSWORD=PikoPop2026!
 EOF
-chmod 600 "${APP_DIR}/.env"
+# Apache runs as www-data — group must be able to read .env
 chown ubuntu:www-data "${APP_DIR}/.env"
-echo ".env restored at ${APP_DIR}/.env"
+chmod 640 "${APP_DIR}/.env"
+echo ".env restored at ${APP_DIR}/.env (readable by www-data)"

@@ -71,7 +71,8 @@ mkdir -p uploads tmp application/cache application/logs
 chown -R ubuntu:www-data "${APP_DIR}"
 find "${APP_DIR}" -type d -exec chmod 775 {} \;
 find "${APP_DIR}" -type f -exec chmod 664 {} \;
-chmod 600 .env 2>/dev/null || true
+chown ubuntu:www-data .env 2>/dev/null || true
+chmod 640 .env 2>/dev/null || true
 
 cat > .env <<EOF
 APP_ENV=staging
@@ -80,7 +81,8 @@ DB_DATABASE=${DB_NAME}
 DB_USERNAME=${DB_USER}
 DB_PASSWORD=${DB_PASS}
 EOF
-chmod 600 .env
+chown ubuntu:www-data .env
+chmod 640 .env
 
 if [[ -f database/schema.sql ]]; then
   mysql -u"${DB_USER}" -p"${DB_PASS}" "${DB_NAME}" < database/schema.sql 2>/dev/null || true

@@ -86,7 +86,8 @@ DB_DATABASE=${DB_NAME}
 DB_USERNAME=${DB_USER}
 DB_PASSWORD=${DB_PASS}
 EOF
-  chmod 600 .env
+  chown ubuntu:www-data .env
+  chmod 640 .env
 fi
 
 # Import schema on first run

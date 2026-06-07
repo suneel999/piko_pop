@@ -13,7 +13,8 @@ if command -v sudo >/dev/null 2>&1; then
   sudo chown -R ubuntu:www-data "${APP_DIR}"
   sudo find "${APP_DIR}" -type d -exec chmod 775 {} \;
   sudo find "${APP_DIR}" -type f -exec chmod 664 {} \;
-  sudo chmod 600 .env 2>/dev/null || true
+  sudo chown ubuntu:www-data .env 2>/dev/null || true
+  sudo chmod 640 .env 2>/dev/null || true
   sudo chown -R www-data:www-data uploads tmp application/cache application/logs
   sudo chmod -R 775 uploads tmp application/cache application/logs
 else
