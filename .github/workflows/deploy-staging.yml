@@ -25,13 +25,12 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Install frontend deps
-        run: npm ci
+      - name: Validate CSS build
+        run: |
+          npm ci
+          npm run build:css
 
-      - name: Build Tailwind CSS
-        run: npm run build:css
-
-      - name: Deploy to AWS staging (SSH/rsync)
+      - name: Deploy to AWS staging (git pull)
         env:
           SSH_HOST: ${{ secrets.AWS_STAGING_HOST }}
           SSH_USER: ${{ secrets.AWS_STAGING_USER }}
@@ -52,43 +51,23 @@ jobs:
 
           echo "Testing SSH connection..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes \
-            "${SSH_USER}@${SSH_HOST}" "echo SSH OK && whoami && ls -la ${DEPLOY_PATH} | head -5"
+            "${SSH_USER}@${SSH_HOST}" "echo SSH OK"
 
-          echo "Preparing deploy permissions..."
+          echo "Deploying via git pull (avoids rsync permission errors)..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             "${SSH_USER}@${SSH_HOST}" \
-            "sudo mkdir -p ${DEPLOY_PATH} && sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}"
-
-          echo "Backing up server .env (never overwrite from git)..."
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${SSH_HOST}" \
-            "if [ -f ${DEPLOY_PATH}/.env ]; then sudo cp ${DEPLOY_PATH}/.env ${DEPLOY_PATH}/.env.deploybak; fi"
-
-          echo "Syncing files..."
-          rsync -avz --delete \
-            --rsync-path="sudo rsync" \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            --exclude '.git' \
-            --exclude '.github' \
-            --exclude 'node_modules' \
-            --exclude '.env' \
-            --exclude 'deploy/deploy.config.json' \
-            --exclude 'deploy/*.zip' \
-            --exclude 'tmp/' \
-            --exclude 'application/logs/' \
-            --exclude 'uploads/' \
-            --exclude '.claude' \
-            --exclude 'zbit_local' \
-            ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
-
-          echo "Restoring server .env if needed..."
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${SSH_HOST}" \
-            "if [ ! -f ${DEPLOY_PATH}/.env ] && [ -f ${DEPLOY_PATH}/.env.deploybak ]; then sudo cp ${DEPLOY_PATH}/.env.deploybak ${DEPLOY_PATH}/.env; fi"
-
-          echo "Running post-deploy..."
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${SSH_HOST}" \
-            "sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"
-
-          echo "Deploy finished successfully."
+            "set -euo pipefail
+             sudo mkdir -p ${DEPLOY_PATH}
+             sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}
+             cd ${DEPLOY_PATH}
+             if [ ! -d .git ]; then
+               git clone -b staging https://github.com/suneel999/piko_pop.git ${DEPLOY_PATH}
+             fi
+             git remote set-url origin https://github.com/suneel999/piko_pop.git
+             git fetch origin staging
+             git checkout staging
+             git reset --hard origin/staging
+             npm ci
+             npm run build:css
+             sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh
+             echo Deploy complete."

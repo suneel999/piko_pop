@@ -25,13 +25,12 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Install frontend deps
-        run: npm ci
+      - name: Validate CSS build
+        run: |
+          npm ci
+          npm run build:css
 
-      - name: Build Tailwind CSS
-        run: npm run build:css
-
-      - name: Deploy to AWS production (SSH/rsync)
+      - name: Deploy to AWS production (git pull)
         env:
           SSH_HOST: ${{ secrets.AWS_PRODUCTION_HOST }}
           SSH_USER: ${{ secrets.AWS_PRODUCTION_USER }}
@@ -50,35 +49,23 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          echo "Testing SSH connection..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o BatchMode=yes \
-            "${SSH_USER}@${SSH_HOST}" "echo SSH OK && whoami"
+            "${SSH_USER}@${SSH_HOST}" "echo SSH OK"
 
-          echo "Preparing deploy permissions..."
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
             "${SSH_USER}@${SSH_HOST}" \
-            "sudo mkdir -p ${DEPLOY_PATH} && sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}"
-
-          echo "Syncing files..."
-          rsync -avz --delete \
-            --rsync-path="sudo rsync" \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            --exclude '.git' \
-            --exclude '.github' \
-            --exclude 'node_modules' \
-            --exclude '.env' \
-            --exclude 'deploy/deploy.config.json' \
-            --exclude 'deploy/*.zip' \
-            --exclude 'tmp/' \
-            --exclude 'application/logs/' \
-            --exclude 'uploads/' \
-            --exclude '.claude' \
-            --exclude 'zbit_local' \
-            ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
-
-          echo "Running post-deploy..."
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            "${SSH_USER}@${SSH_HOST}" \
-            "sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh"
-
-          echo "Deploy finished successfully."
+            "set -euo pipefail
+             sudo mkdir -p ${DEPLOY_PATH}
+             sudo chown -R ${SSH_USER}:www-data ${DEPLOY_PATH}
+             cd ${DEPLOY_PATH}
+             if [ ! -d .git ]; then
+               git clone -b main https://github.com/suneel999/piko_pop.git ${DEPLOY_PATH}
+             fi
+             git remote set-url origin https://github.com/suneel999/piko_pop.git
+             git fetch origin main
+             git checkout main
+             git reset --hard origin/main
+             npm ci
+             npm run build:css
+             sudo APP_DIR=${DEPLOY_PATH} bash ${DEPLOY_PATH}/deploy/aws/post-deploy.sh
+             echo Deploy complete."
