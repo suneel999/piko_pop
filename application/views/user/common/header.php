@@ -109,7 +109,7 @@ if ($is_logged_in) {
     <!-- Announcement Bar -->
     <div class="announcement-bar">
         <div class="page-container py-2.5 text-center text-xs sm:text-sm font-semibold tracking-wide">
-            Free Shipping above ₹499 &nbsp;·&nbsp; Easy Returns &nbsp;·&nbsp; Safe for Kids &nbsp;·&nbsp; Now Live
+            Free Shipping above ₹499 &nbsp;·&nbsp; Easy Returns &nbsp;·&nbsp; Safe for Kids &nbsp;·&nbsp; Now Left
         </div>
     </div>
 
