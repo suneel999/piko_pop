@@ -6,6 +6,20 @@
 $(document).ready(function () {
     'use strict';
 
+    // Reveal lazy-loaded images after they load
+    $('img[loading="lazy"]').each(function () {
+        const img = this;
+        const markLoaded = function () {
+            img.classList.add('loaded');
+        };
+        if (img.complete) {
+            markLoaded();
+        } else {
+            img.addEventListener('load', markLoaded, { once: true });
+            img.addEventListener('error', markLoaded, { once: true });
+        }
+    });
+
     // ========================================
     // Mobile Navigation
     // ========================================

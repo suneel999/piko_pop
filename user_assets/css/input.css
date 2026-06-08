@@ -121,16 +121,12 @@
     appearance: textfield;
   }
 
-  /* Smooth image loading */
-  img {
-    transition: opacity 0.3s ease;
-  }
-
-  img[loading] {
+  /* Smooth image loading — only fade in lazy-loaded images */
+  img[loading="lazy"] {
     opacity: 0;
   }
 
-  img.loaded {
+  img[loading="lazy"].loaded {
     opacity: 1;
   }
 }
