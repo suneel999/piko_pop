@@ -30,23 +30,16 @@
 
             <div class="hero-visual">
                 <?php
-                $hero_showcase = hero_showcase_images();
-                $hero_primary = !empty($hero_showcase[0]) ? $hero_showcase[0] : brand_image_url('hero.png');
-                $hero_secondary = !empty($hero_showcase[1]) ? $hero_showcase[1] : null;
+                $hero_image = brand_image_url('hero1.jpeg');
+                if (!$hero_image) {
+                    $hero_showcase = hero_showcase_images();
+                    $hero_image = !empty($hero_showcase[0]) ? $hero_showcase[0] : brand_image_url('hero.png');
+                }
                 ?>
 
-                <?php if ($hero_primary && $hero_secondary): ?>
-                    <div class="hero-visual-gallery" aria-label="Featured PIKO POP products">
-                        <figure class="hero-visual-gallery-item">
-                            <img src="<?php echo $hero_primary; ?>" alt="PIKO POP featured collection" loading="eager" decoding="async">
-                        </figure>
-                        <figure class="hero-visual-gallery-item">
-                            <img src="<?php echo $hero_secondary; ?>" alt="PIKO POP bestsellers" loading="eager" decoding="async">
-                        </figure>
-                    </div>
-                <?php elseif ($hero_primary): ?>
-                    <div class="hero-image-panel">
-                        <img src="<?php echo $hero_primary; ?>" alt="PIKO POP products" class="hero-image" width="640" height="640" loading="eager">
+                <?php if ($hero_image): ?>
+                    <div class="hero-feature-panel">
+                        <img src="<?php echo $hero_image; ?>" alt="PIKO POP products" class="hero-feature-image" loading="eager" decoding="async">
                     </div>
                 <?php elseif (!empty($banners) && count($banners) > 0): ?>
                     <div id="bannerSlider" class="hero-banner-slider">

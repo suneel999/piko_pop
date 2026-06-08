@@ -356,11 +356,11 @@
   }
 
   .site-header-logo {
-    @apply h-14 md:h-[4.25rem] w-auto max-w-[240px] md:max-w-[300px] object-contain;
+    @apply h-[4.25rem] md:h-24 w-auto max-w-[280px] md:max-w-[340px] object-contain;
   }
 
   .site-header-logo--sm {
-    @apply h-12 max-w-[220px];
+    @apply h-14 max-w-[260px];
   }
 
   .site-header-top {
