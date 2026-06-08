@@ -36,13 +36,12 @@
                 ?>
 
                 <?php if ($hero_primary && $hero_secondary): ?>
-                    <div class="hero-visual-duo" aria-label="Featured PIKO POP products">
-                        <div class="hero-visual-duo-bg" aria-hidden="true"></div>
-                        <figure class="hero-visual-duo-main">
-                            <img src="<?php echo $hero_primary; ?>" alt="PIKO POP featured collection" width="480" height="600" loading="eager">
+                    <div class="hero-visual-gallery" aria-label="Featured PIKO POP products">
+                        <figure class="hero-visual-gallery-item">
+                            <img src="<?php echo $hero_primary; ?>" alt="PIKO POP featured collection" loading="eager" decoding="async">
                         </figure>
-                        <figure class="hero-visual-duo-accent">
-                            <img src="<?php echo $hero_secondary; ?>" alt="PIKO POP bestsellers" width="320" height="320" loading="eager">
+                        <figure class="hero-visual-gallery-item">
+                            <img src="<?php echo $hero_secondary; ?>" alt="PIKO POP bestsellers" loading="eager" decoding="async">
                         </figure>
                     </div>
                 <?php elseif ($hero_primary): ?>
