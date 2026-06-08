@@ -29,10 +29,25 @@
             </div>
 
             <div class="hero-visual">
-                <?php $hero_image_url = brand_image_url('hero.png'); ?>
-                <?php if ($hero_image_url): ?>
+                <?php
+                $hero_showcase = hero_showcase_images();
+                $hero_primary = !empty($hero_showcase[0]) ? $hero_showcase[0] : brand_image_url('hero.png');
+                $hero_secondary = !empty($hero_showcase[1]) ? $hero_showcase[1] : null;
+                ?>
+
+                <?php if ($hero_primary && $hero_secondary): ?>
+                    <div class="hero-visual-duo" aria-label="Featured PIKO POP products">
+                        <div class="hero-visual-duo-bg" aria-hidden="true"></div>
+                        <figure class="hero-visual-duo-main">
+                            <img src="<?php echo $hero_primary; ?>" alt="PIKO POP featured collection" width="480" height="600" loading="eager">
+                        </figure>
+                        <figure class="hero-visual-duo-accent">
+                            <img src="<?php echo $hero_secondary; ?>" alt="PIKO POP bestsellers" width="320" height="320" loading="eager">
+                        </figure>
+                    </div>
+                <?php elseif ($hero_primary): ?>
                     <div class="hero-image-panel">
-                        <img src="<?php echo $hero_image_url; ?>" alt="PIKO POP products" class="hero-image" width="640" height="640" loading="eager">
+                        <img src="<?php echo $hero_primary; ?>" alt="PIKO POP products" class="hero-image" width="640" height="640" loading="eager">
                     </div>
                 <?php elseif (!empty($banners) && count($banners) > 0): ?>
                     <div id="bannerSlider" class="hero-banner-slider">

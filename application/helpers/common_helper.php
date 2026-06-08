@@ -441,6 +441,28 @@ function send_sms($phone, $message, $fakeSend = false, $defaultCountryCode = '91
 }
 
 /**
+ * Hero showcase images (hero1.jpeg + hero2.jpeg).
+ */
+function hero_showcase_images()
+{
+    $images = array();
+    $sets = array(
+        array('hero1.jpeg', 'hero1.jpg'),
+        array('hero2.jpeg', 'hero2.jpg'),
+    );
+    foreach ($sets as $candidates) {
+        foreach ($candidates as $name) {
+            $url = brand_image_url($name);
+            if ($url) {
+                $images[] = $url;
+                break;
+            }
+        }
+    }
+    return $images;
+}
+
+/**
  * Resolve a brand image under assets/images or user_assets/images.
  */
 function brand_image_url($filename)
