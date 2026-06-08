@@ -37,7 +37,7 @@ class Shop extends CI_Controller
         $all_categories = $this->shop_model->get_all_categories();
 
         // Prepare data for view
-        $header_data['title'] = 'Shop - Bhaarat Groceries';
+        $header_data['page_title'] = 'Shop';
         $data['products'] = $products;
         $data['all_categories'] = $all_categories;
         $data['page_title'] = 'All Products';
@@ -87,7 +87,7 @@ class Shop extends CI_Controller
         $all_categories = $this->shop_model->get_all_categories();
 
         // Prepare data for view
-        $header_data['title'] = 'Search: ' . htmlspecialchars($keyword) . ' - Bhaarat Groceries';
+        $header_data['page_title'] = 'Search: ' . htmlspecialchars($keyword);
         $data['products'] = $products;
         $data['all_categories'] = $all_categories;
         $data['page_title'] = 'Search Results for "' . htmlspecialchars($keyword) . '"';
@@ -175,7 +175,7 @@ class Shop extends CI_Controller
         $product_recipes = $this->db->get()->result();
 
         // Prepare data for view
-        $header_data['title'] = $product->product_name . ' - Bhaarat Groceries';
+        $header_data['page_title'] = $product->product_name;
         $data['product'] = $product;
         $data['related_products'] = $related_products;
         $data['product_recipes'] = $product_recipes;
@@ -245,7 +245,7 @@ class Shop extends CI_Controller
         $products = $this->shop_model->get_category_products($category_ids, $this->per_page, $offset);
 
         // Prepare data for view
-        $header_data['title'] = $category->category_name . ' - Bhaarat Groceries';
+        $header_data['page_title'] = $category->category_name;
         $data['category'] = $category;
         $data['subcategories'] = $subcategories;
         $data['products'] = $products;

@@ -1,7 +1,8 @@
-<section class="home-section section-pastel-yellow">
+<section class="home-section bg-white border-t border-gray-100">
     <div class="page-container">
         <div class="section-header">
-            <h2 class="home-section-title">Loved by Parents, Adored by Kids</h2>
+            <h2 class="home-section-title">Customer Reviews</h2>
+            <p class="section-subtitle">What our customers say about PIKO POP</p>
         </div>
         <div class="review-grid">
             <article class="review-card">

@@ -42,11 +42,11 @@ if (!empty($categories) && count($categories) > 0) {
     }
 }
 ?>
-<section class="home-section section-pastel-purple">
+<section class="home-section bg-white border-t border-gray-100">
     <div class="page-container">
         <div class="section-header">
-            <h2 class="home-section-title">Pick Your Happy Collection</h2>
-            <p class="section-subtitle">Stickers, stationery, toys &amp; gifts — curated for little smiles</p>
+            <h2 class="home-section-title">Shop by Category</h2>
+            <p class="section-subtitle">Browse our most popular collections</p>
         </div>
 
         <div class="category-grid">

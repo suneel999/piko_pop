@@ -50,10 +50,10 @@ if (!isset($header_categories)) {
             <div class="site-footer-grid">
                 <div class="site-footer-brand">
                     <a href="<?php echo base_url(); ?>" class="inline-block mb-5">
-                        <img src="<?php echo brand_logo_url('white'); ?>" alt="PIKO POP" class="site-footer-logo">
+                        <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-footer-logo">
                     </a>
                     <p class="site-footer-about">
-                        Premium cute products for kids — stickers, stationery, toys &amp; gifts that spark joy every day.
+                        Stickers, stationery, toys and gifts for kids — quality products with reliable delivery across India.
                     </p>
                     <div class="site-footer-social">
                         <a href="#" class="site-footer-social-link" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>

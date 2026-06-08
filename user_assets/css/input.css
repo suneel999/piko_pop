@@ -1,29 +1,28 @@
 @import "tailwindcss";
 
-/* PIKO POP — Kids ecommerce design system */
+/* PIKO POP — Professional ecommerce design system */
 @theme {
-  /* Brand Colors */
-  --color-primary: #FF4FA3;
-  --color-primary-dark: #E83D8F;
-  --color-primary-light: #FF7FBC;
+  /* Brand */
+  --color-primary: #E91E8C;
+  --color-primary-dark: #C41775;
+  --color-primary-light: #F472B6;
 
-  --color-secondary: #6C3CC9;
-  --color-secondary-dark: #5529A8;
-  --color-secondary-light: #8B5FE0;
+  --color-secondary: #111827;
+  --color-secondary-dark: #030712;
+  --color-secondary-light: #374151;
 
-  --color-accent-yellow: #FFD83D;
-  --color-accent-blue: #20BDF7;
-  --color-brand-bg: #FFF9FD;
+  --color-accent-yellow: #F59E0B;
+  --color-accent-blue: #2563EB;
+  --color-brand-bg: #FFFFFF;
 
-  /* Neutral Colors */
-  --color-dark: #3D2B5E;
-  --color-gray: #7A6B8E;
-  --color-light-gray: #FFF0F8;
+  /* Neutrals */
+  --color-dark: #111827;
+  --color-gray: #6B7280;
+  --color-light-gray: #F3F4F6;
   --color-white: #ffffff;
 
-  /* Font Family */
-  --font-family-sans: 'Nunito', system-ui, -apple-system, sans-serif;
-  --font-family-display: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Custom Animations */
   --animate-fade-in: fadeIn 0.3s ease-out;
@@ -83,8 +82,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-display);
-    letter-spacing: -0.01em;
+    font-family: var(--font-family-sans);
+    letter-spacing: -0.02em;
+    font-weight: 600;
   }
 
   /* Better focus styles for accessibility */
@@ -1571,6 +1571,8 @@
 .variant-wrapper:has(.variant-option[data-selected="true"]) .variant-discount-tooltip::after {
   border-color: var(--color-primary) transparent transparent transparent;
 }
+
+@import "./pro-overrides.css";
 
 @media (max-width: 639px) {
   .header-action-label {

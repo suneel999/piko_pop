@@ -1,7 +1,7 @@
 <!-- Trending Products -->
 <?php if (!empty($featured_category_products)): ?>
     <?php
-    $product_badges = array('Popular', 'Favorite', 'Gift Pick');
+    $product_badges = array('Bestseller', 'New', 'Popular');
     ?>
     <?php foreach ($featured_category_products as $section_index => $section): ?>
         <?php if ($section_index > 0) continue; ?>
@@ -10,11 +10,11 @@
         $products = $section['products'];
         ?>
 
-        <section class="home-section bg-brand-bg">
+        <section class="home-section bg-gray-50 border-t border-gray-100">
             <div class="page-container">
                 <div class="section-header">
-                    <h2 class="home-section-title">Kids Are Loving These</h2>
-                    <p class="section-subtitle">Trending picks from our cutest collections</p>
+                    <h2 class="home-section-title">Trending Products</h2>
+                    <p class="section-subtitle">Popular picks from <?php echo htmlspecialchars($category->category_name); ?></p>
                 </div>
 
                 <div class="relative group/slider">
@@ -92,7 +92,7 @@
                                             <button class="add-to-cart-btn add-to-cart-btn-action home-add-bag-btn"
                                                 data-product-id="<?php echo $product->id; ?>"
                                                 data-variant-id="0">
-                                                <span>Add to Bag</span>
+                                                <span>Add to Cart</span>
                                                 <i class="fa-solid fa-bag-shopping"></i>
                                             </button>
                                         <?php endif; ?>

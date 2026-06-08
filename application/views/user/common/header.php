@@ -25,14 +25,14 @@ if ($is_logged_in) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . ' - ' : ''; ?>PIKO POP | Cute Kids Store</title>
-    <meta name="description" content="<?php echo isset($meta_description) ? htmlspecialchars($meta_description) : 'Shop stickers, stationery, toys, collectibles, accessories and gifts at PIKO POP. Fun, cute products for little smiles every day.'; ?>">
+    <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . ' - ' : ''; ?>PIKO POP | Kids Store Online</title>
+    <meta name="description" content="<?php echo isset($meta_description) ? htmlspecialchars($meta_description) : 'Shop stickers, stationery, toys and gifts at PIKO POP. Quality products for kids with fast delivery across India.'; ?>">
     <link rel="icon" type="image/png" href="<?php echo base_url('user_assets/images/piko-pop-favicon.png'); ?>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
     <link
@@ -104,12 +104,12 @@ if ($is_logged_in) {
     </script>
 </head>
 
-<body class="bg-brand-bg <?php echo (isset($page_title) && $page_title === 'Home') ? 'home-page' : ''; ?>">
+<body class="bg-white <?php echo (isset($page_title) && $page_title === 'Home') ? 'home-page' : ''; ?>">
 
     <!-- Announcement Bar -->
     <div class="announcement-bar">
-        <div class="page-container py-2.5 text-center text-xs sm:text-sm font-semibold tracking-wide">
-            Free Shipping above ₹499 &nbsp;·&nbsp; Easy Returns &nbsp;·&nbsp; Safe for Kids &nbsp;·&nbsp; Now Left
+        <div class="page-container py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide">
+            Free shipping on orders above ₹499 &nbsp;·&nbsp; Easy returns &nbsp;·&nbsp; Secure checkout
         </div>
     </div>
 
@@ -129,8 +129,8 @@ if ($is_logged_in) {
                 <!-- Desktop search -->
                 <form action="<?php echo base_url('shop/search'); ?>" method="get" class="site-header-search hidden md:flex">
                     <div class="relative w-full">
-                        <input type="text" name="q" placeholder="Search stickers, toys &amp; cute things..." class="header-search-input w-full pl-5 pr-14 py-3.5 rounded-full border-2 border-primary/15 bg-white/90 text-dark placeholder:text-gray/70 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all">
-                        <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary-dark transition-colors shadow-md" aria-label="Search">
+                        <input type="text" name="q" placeholder="Search products, categories..." class="header-search-input w-full pl-5 pr-14 py-3.5 rounded-lg border border-gray-300 bg-white text-dark placeholder:text-gray/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all">
+                        <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary-dark transition-colors" aria-label="Search">
                             <i class="fa-solid fa-magnifying-glass text-sm"></i>
                         </button>
                     </div>
@@ -205,7 +205,7 @@ if ($is_logged_in) {
                             $sticker_links = array('ABCD Stickers', 'Animal Stickers', 'Space Stickers', 'Cartoon Stickers', 'Emoji Stickers');
                             foreach ($sticker_links as $sl): ?>
                                 <a href="<?php echo base_url('shop/search?q=' . urlencode($sl)); ?>" class="header-nav-dropdown-item">
-                                    <span class="w-8 h-8 rounded-xl bg-accent-yellow/30 flex items-center justify-center">✨</span>
+                                    <span class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600"><i class="fa-solid fa-tag text-sm"></i></span>
                                     <span><?php echo $sl; ?></span>
                                 </a>
                             <?php endforeach; ?>
@@ -224,8 +224,8 @@ if ($is_logged_in) {
                     </a>
                     <div class="header-nav-dropdown">
                         <div class="py-2">
-                            <a href="<?php echo base_url('shop/search?q=gift'); ?>" class="header-nav-dropdown-item"><span class="w-8 h-8 rounded-xl bg-secondary/15 flex items-center justify-center">🎁</span> Gift Sets</a>
-                            <a href="<?php echo base_url('page/bulk_order'); ?>" class="header-nav-dropdown-item"><span class="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center">🎉</span> Party &amp; Gift Orders</a>
+                            <a href="<?php echo base_url('shop/search?q=gift'); ?>" class="header-nav-dropdown-item"><span class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600"><i class="fa-solid fa-gift text-sm"></i></span> Gift Sets</a>
+                            <a href="<?php echo base_url('page/bulk_order'); ?>" class="header-nav-dropdown-item"><span class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600"><i class="fa-solid fa-boxes-stacked text-sm"></i></span> Party &amp; Bulk Orders</a>
                         </div>
                     </div>
                 </div>
@@ -235,10 +235,10 @@ if ($is_logged_in) {
         </div>
 
         <!-- Mobile Search Bar -->
-        <div id="searchBar" class="hidden border-t border-primary/10 bg-white/95 md:hidden">
+        <div id="searchBar" class="hidden border-t border-gray-200 bg-white md:hidden">
             <div class="page-container py-3">
                 <form action="<?php echo base_url('shop/search'); ?>" method="get" class="flex items-center gap-2">
-                    <input type="text" name="q" placeholder="Search stickers, toys &amp; cute things..." class="header-search-input flex-1 px-4 py-3 rounded-full border-2 border-primary/15 bg-white focus:outline-none focus:border-primary">
+                    <input type="text" name="q" placeholder="Search products..." class="header-search-input flex-1 px-4 py-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:border-primary">
                     <button type="submit" class="btn-primary px-5 py-3 text-sm">Go</button>
                 </form>
             </div>
@@ -250,7 +250,7 @@ if ($is_logged_in) {
     <aside id="mobileSidebar" class="mobile-sidebar">
         <?php if ($is_logged_in): ?>
             <!-- Sidebar Header with User Info (Logged In) -->
-            <div class="p-4 border-b border-primary/10 bg-gradient-to-r from-primary/10 to-secondary/10">
+            <div class="p-4 border-b border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between mb-4">
                     <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-header-logo site-header-logo--sm">
                     <button id="sidebarClose" class="text-2xl text-gray-600 hover:text-primary transition-colors">
