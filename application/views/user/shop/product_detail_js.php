@@ -5,8 +5,8 @@ $(document).ready(function() {
     $(document).on('click', '.thumbnail-btn', function() {
         var newImage = $(this).data('image');
         $('#mainImage').attr('src', newImage);
-        $('.thumbnail-btn').removeClass('border-secondary').addClass('border-primary/15');
-        $(this).removeClass('border-primary/15').addClass('border-secondary');
+        $('.thumbnail-btn').removeClass('border-secondary');
+        $(this).addClass('border-secondary');
     });
 
     // Thumbnail slider navigation
@@ -19,8 +19,8 @@ $(document).ready(function() {
 
     // Variant selection
     $(document).on('click', '.variant-option', function() {
-        $('.variant-option').removeClass('border-secondary bg-secondary/5').addClass('border-primary/15');
-        $(this).removeClass('border-primary/15').addClass('border-secondary bg-secondary/5');
+        $('.variant-option').removeClass('border-secondary bg-secondary/5');
+        $(this).addClass('border-secondary bg-secondary/5');
 
         var price = parseFloat($(this).data('price'));
         var mrp = parseFloat($(this).data('mrp'));
@@ -45,17 +45,16 @@ $(document).ready(function() {
         $('#buyNowBtn').data('variant-id', variantId);
     });
 
-    // // Quantity controls
-    // $('#qtyMinus').click(function() {
-    //     var qty = parseInt($('#productQty').val());
-    //     if (qty > 1) {
-    //         $('#productQty').val(qty - 1);
-    //     }
-    // });
-    // $('#qtyPlus').click(function() {
-    //     var qty = parseInt($('#productQty').val());
-    //     $('#productQty').val(qty + 1);
-    // });
+    $('#qtyMinus').click(function() {
+        var qty = parseInt($('#productQty').val(), 10) || 1;
+        if (qty > 1) {
+            $('#productQty').val(qty - 1);
+        }
+    });
+    $('#qtyPlus').click(function() {
+        var qty = parseInt($('#productQty').val(), 10) || 1;
+        $('#productQty').val(qty + 1);
+    });
 
     // Add to Cart
     $('#addToCartBtn').click(function() {
@@ -163,7 +162,7 @@ $(document).ready(function() {
         } else {
             // Fallback - copy to clipboard
             navigator.clipboard.writeText(window.location.href).then(function() {
-                alert('Link copied! Share this cute find with friends.');
+                alert('Link copied to clipboard.');
             });
         }
     });

@@ -336,4 +336,207 @@
   .site-footer-bottom-inner {
     @apply text-gray;
   }
+
+  /* Product detail page */
+  .pdp-page {
+    @apply bg-white min-h-screen;
+  }
+
+  .pdp-breadcrumb {
+    @apply border-b border-gray-200 bg-gray-50;
+  }
+
+  .pdp-breadcrumb-inner {
+    @apply py-3 md:py-4;
+  }
+
+  .pdp-breadcrumb a {
+    @apply text-gray hover:text-primary transition-colors;
+  }
+
+  .pdp-shell {
+    @apply py-8 md:py-12 lg:py-14;
+  }
+
+  .pdp-layout {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 xl:gap-16 items-start;
+  }
+
+  .pdp-gallery {
+    @apply lg:sticky lg:top-28;
+  }
+
+  .pdp-main-image {
+    @apply relative mb-4 md:mb-5 rounded-xl border border-gray-200 bg-gray-50 overflow-hidden;
+    aspect-ratio: 1 / 1;
+  }
+
+  .pdp-main-image img {
+    @apply w-full h-full object-contain p-4 md:p-6;
+    opacity: 1;
+  }
+
+  .pdp-discount-badge {
+    @apply absolute top-4 left-4 z-10 inline-flex items-center px-3 py-1 rounded-md bg-dark text-white text-xs font-semibold;
+  }
+
+  .pdp-wishlist-btn {
+    @apply absolute top-4 right-4 z-10 w-11 h-11 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:text-primary hover:border-primary/30 transition-colors shadow-sm;
+  }
+
+  .pdp-thumbs {
+    @apply flex items-center gap-2;
+  }
+
+  .pdp-thumb-btn {
+    @apply flex-shrink-0 w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-primary hover:border-gray-300 transition-colors;
+  }
+
+  .pdp-thumb-list {
+    @apply flex gap-3 overflow-x-auto flex-1 px-1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .pdp-thumb-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-thumb-list .thumbnail-btn {
+    @apply flex-shrink-0 w-[4.5rem] h-[4.5rem] rounded-lg overflow-hidden border-2 border-gray-200 bg-white p-1 transition-colors;
+  }
+
+  .pdp-thumb-list .thumbnail-btn.border-secondary {
+    @apply border-primary ring-2 ring-primary/15;
+  }
+
+  .pdp-info {
+    @apply min-w-0;
+  }
+
+  .pdp-title {
+    @apply text-2xl md:text-3xl lg:text-[2rem] font-semibold text-dark leading-tight mb-3;
+  }
+
+  .pdp-meta {
+    @apply text-sm text-gray mb-6;
+  }
+
+  .pdp-price-box {
+    @apply rounded-xl border border-gray-200 bg-gray-50 p-5 md:p-6 mb-6;
+  }
+
+  .pdp-price-row {
+    @apply flex flex-wrap items-end gap-x-3 gap-y-1 mb-2;
+  }
+
+  .pdp-price-current {
+    @apply text-3xl md:text-4xl font-semibold text-dark;
+  }
+
+  .pdp-price-mrp {
+    @apply text-base text-gray line-through;
+  }
+
+  .pdp-price-save {
+    @apply inline-flex items-center px-2.5 py-1 rounded-md bg-green-100 text-green-800 text-xs font-semibold;
+  }
+
+  .pdp-tax-note {
+    @apply text-sm text-gray;
+  }
+
+  .pdp-field-label {
+    @apply block text-sm font-semibold text-dark mb-3;
+  }
+
+  .pdp-variant-option {
+    @apply px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-dark bg-white transition-colors;
+  }
+
+  .pdp-variant-option.border-secondary {
+    @apply border-primary bg-primary/5 text-primary ring-2 ring-primary/10;
+  }
+
+  .pdp-variant-option:hover:not(.border-secondary) {
+    @apply border-gray-400;
+  }
+
+  .pdp-qty {
+    @apply inline-flex items-center border border-gray-300 rounded-lg overflow-hidden bg-white;
+  }
+
+  .pdp-qty .qty-btn {
+    @apply w-11 h-11 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-dark transition-colors;
+  }
+
+  .pdp-qty #productQty {
+    @apply w-14 h-11 text-center font-semibold text-dark border-x border-gray-300 focus:outline-none;
+  }
+
+  .pdp-actions {
+    @apply flex flex-col sm:flex-row gap-3 mb-8 pt-2;
+  }
+
+  .pdp-actions .btn-primary,
+  .pdp-actions .btn-secondary {
+    @apply py-3.5 text-base font-semibold;
+  }
+
+  .pdp-accordions {
+    @apply border-t border-gray-200 mt-2;
+  }
+
+  .pdp-accordion {
+    @apply border-b border-gray-200;
+  }
+
+  .pdp-accordion-toggle {
+    @apply w-full flex items-center justify-between py-4 md:py-5 text-left gap-4;
+  }
+
+  .pdp-accordion-title {
+    @apply font-semibold text-dark text-sm md:text-base;
+  }
+
+  .pdp-accordion-body {
+    @apply pb-5 text-sm text-gray leading-relaxed;
+  }
+
+  .pdp-related {
+    @apply py-12 md:py-16 bg-gray-50 border-t border-gray-200;
+  }
+
+  .pdp-related-title {
+    @apply text-xl md:text-2xl font-semibold text-dark;
+  }
+
+  /* Site-wide page layout consistency */
+  main {
+    @apply bg-white;
+  }
+
+  main .container.mx-auto,
+  .site-page .container.mx-auto {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .site-page {
+    @apply min-h-screen bg-white;
+  }
+
+  .site-page > .border-b.border-primary\/10,
+  .site-page > div.border-b {
+    @apply bg-gray-50 border-gray-200;
+  }
+
+  .site-page > .border-b .container.mx-auto,
+  .site-page > div.border-b .container.mx-auto {
+    @apply py-3 md:py-4;
+  }
+
+  .site-page .container.mx-auto.py-6,
+  .site-page .container.mx-auto.py-6.md\:py-10 {
+    @apply py-8 md:py-10 lg:py-12;
+  }
 }

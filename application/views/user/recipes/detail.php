@@ -3,7 +3,7 @@ $thumb = recipe_thumbnail_url($recipe);
 $total_time = intval($recipe->prep_time_minutes) + intval($recipe->cook_time_minutes);
 $ingredients_list = !empty($recipe->ingredients) ? array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $recipe->ingredients))) : array();
 ?>
-<main class="min-h-screen bg-white">
+<div class="site-page">
     <!-- Breadcrumb -->
     <div class="bg-light-gray border-b border-gray-200">
         <div class="container mx-auto px-4 py-3">
@@ -167,4 +167,4 @@ $ingredients_list = !empty($recipe->ingredients) ? array_filter(array_map('trim'
             </section>
         <?php endif; ?>
     </div>
-</main>
+</div>

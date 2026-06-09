@@ -22,96 +22,84 @@ $about_text = !empty($product->description)
     ? strip_tags($product->description)
     : (!empty($product->short_description) ? $product->short_description : 'Bright, colorful designs made for endless creativity.');
 ?>
-<!-- Main Content -->
-<main class="min-h-screen bg-brand-bg">
-    <!-- Breadcrumb -->
-    <div class="border-b border-primary/10 bg-white/70">
-        <div class="container mx-auto px-4 py-3">
+<!-- Product Detail Page -->
+<div class="pdp-page">
+    <div class="pdp-breadcrumb">
+        <div class="page-container pdp-breadcrumb-inner">
             <nav class="flex items-center gap-2 text-sm flex-wrap">
-                <a href="<?php echo base_url(); ?>" class="text-gray hover:text-primary transition-colors">Home</a>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
-                <a href="<?php echo base_url('shop'); ?>" class="text-gray hover:text-primary transition-colors">Shop</a>
+                <a href="<?php echo base_url(); ?>">Home</a>
+                <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                <a href="<?php echo base_url('shop'); ?>">Shop</a>
                 <?php if (!empty($product->category)): ?>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
-                <a href="<?php echo category_url($product->category); ?>" class="text-gray hover:text-primary transition-colors"><?php echo htmlspecialchars($product->category->category_name); ?></a>
+                <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                <a href="<?php echo category_url($product->category); ?>"><?php echo htmlspecialchars($product->category->category_name); ?></a>
                 <?php endif; ?>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
-                <span class="text-dark font-semibold line-clamp-1"><?php echo htmlspecialchars($product->product_name); ?></span>
+                <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                <span class="text-dark font-medium line-clamp-1"><?php echo htmlspecialchars($product->product_name); ?></span>
             </nav>
         </div>
     </div>
 
-    <!-- Product Section -->
-    <div class="container mx-auto px-4 py-6 md:py-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div class="page-container pdp-shell">
+        <div class="pdp-layout">
 
-            <!-- Left: Product Gallery -->
-            <div class="product-gallery">
-                <div class="main-image-container bg-light-gray rounded-3xl overflow-hidden mb-4 md:mb-6 aspect-square relative card-pop">
-                    <img id="mainImage" src="<?php echo $main_image_url; ?>" alt="<?php echo htmlspecialchars($product->product_name); ?>" class="w-full h-full object-cover">
+            <div class="product-gallery pdp-gallery">
+                <div class="main-image-container pdp-main-image">
+                    <img id="mainImage" src="<?php echo $main_image_url; ?>" alt="<?php echo htmlspecialchars($product->product_name); ?>">
                     <?php if ($discount > 0): ?>
-                    <span class="absolute top-4 left-4 badge badge-primary text-sm"><?php echo $discount; ?>% OFF</span>
+                    <span class="pdp-discount-badge"><?php echo $discount; ?>% OFF</span>
                     <?php endif; ?>
-                    <a href="<?php echo base_url('wishlist'); ?>" class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/95 shadow-md flex items-center justify-center text-gray hover:text-primary transition-all z-10" aria-label="Wishlist">
+                    <a href="<?php echo base_url('wishlist'); ?>" class="pdp-wishlist-btn" aria-label="Wishlist">
                         <i class="fa-regular fa-heart text-lg"></i>
                     </a>
                 </div>
 
                 <?php if (count($product->images_array) > 1): ?>
-                <div class="relative flex items-center">
-                    <button id="thumbPrev" class="flex-shrink-0 w-9 h-9 rounded-full bg-white border border-primary/15 flex items-center justify-center text-gray hover:text-primary transition-colors shadow-sm">
+                <div class="pdp-thumbs">
+                    <button id="thumbPrev" type="button" class="pdp-thumb-btn" aria-label="Previous thumbnails">
                         <i class="fa-solid fa-chevron-left text-sm"></i>
                     </button>
-                    <div id="thumbnailContainer" class="flex gap-3 overflow-x-auto hide-scrollbar flex-1 px-2">
+                    <div id="thumbnailContainer" class="pdp-thumb-list">
                         <?php foreach ($product->images_array as $index => $image): ?>
                         <?php $thumb_url = base_url('uploads/products/' . $image); ?>
-                        <button class="thumbnail-btn flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-2 <?php echo $index === 0 ? 'border-secondary' : 'border-primary/15 hover:border-primary/40'; ?> bg-white p-1 transition-colors" data-image="<?php echo $thumb_url; ?>">
-                            <img src="<?php echo $thumb_url; ?>" alt="Thumbnail <?php echo $index + 1; ?>" class="w-full h-full object-cover rounded-xl">
+                        <button type="button" class="thumbnail-btn <?php echo $index === 0 ? 'border-secondary' : ''; ?>" data-image="<?php echo $thumb_url; ?>" aria-label="View image <?php echo $index + 1; ?>">
+                            <img src="<?php echo $thumb_url; ?>" alt="Thumbnail <?php echo $index + 1; ?>" class="w-full h-full object-cover rounded-md">
                         </button>
                         <?php endforeach; ?>
                     </div>
-                    <button id="thumbNext" class="flex-shrink-0 w-9 h-9 rounded-full bg-white border border-primary/15 flex items-center justify-center text-gray hover:text-primary transition-colors shadow-sm">
+                    <button id="thumbNext" type="button" class="pdp-thumb-btn" aria-label="Next thumbnails">
                         <i class="fa-solid fa-chevron-right text-sm"></i>
                     </button>
                 </div>
                 <?php endif; ?>
             </div>
 
-            <!-- Right: Product Details -->
-            <div class="product-details">
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="badge badge-yellow">⭐ Kids Love It</span>
-                    <span class="badge badge-primary">🎁 Perfect Gift</span>
-                    <span class="badge badge-blue">✨ Collectible</span>
-                </div>
+            <div class="product-details pdp-info">
+                <?php if (!empty($product->category)): ?>
+                <p class="text-xs font-semibold uppercase tracking-wider text-primary mb-2"><?php echo htmlspecialchars($product->category->category_name); ?></p>
+                <?php endif; ?>
 
-                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-dark leading-tight mb-4">
-                    <?php echo htmlspecialchars($product->product_name); ?>
-                </h1>
+                <h1 class="pdp-title"><?php echo htmlspecialchars($product->product_name); ?></h1>
 
-                <div class="flex items-center gap-1 mb-4 text-accent-yellow">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    <span class="text-gray text-sm ml-2 font-semibold">Loved by kids &amp; parents</span>
-                </div>
+                <p class="pdp-meta">Inclusive of all taxes · Secure checkout · Fast delivery available</p>
 
-                <!-- Price block -->
-                <div class="card p-4 md:p-5 mb-5">
-                    <div class="flex flex-wrap items-end gap-2 mb-1">
-                        <span id="productPrice" class="text-2xl md:text-3xl font-bold text-primary">₹<?php echo number_format($current_price, 0); ?></span>
+                <div class="pdp-price-box">
+                    <div class="pdp-price-row">
+                        <span id="productPrice" class="pdp-price-current">₹<?php echo number_format($current_price, 0); ?></span>
                         <?php if ($current_mrp > $current_price): ?>
-                        <span id="productMrp" class="text-base text-gray line-through">MRP ₹<?php echo number_format($current_mrp, 0); ?></span>
+                        <span id="productMrp" class="pdp-price-mrp">MRP ₹<?php echo number_format($current_mrp, 0); ?></span>
                         <?php if ($discount > 0): ?>
-                        <span class="badge badge-secondary">Save <?php echo $discount; ?>%</span>
+                        <span class="pdp-price-save">Save <?php echo $discount; ?>%</span>
                         <?php endif; ?>
                         <?php endif; ?>
                     </div>
-                    <p id="serversText" class="text-sm text-gray font-medium"><?php echo ($has_variants && !empty($default_variant->servers_text)) ? htmlspecialchars($default_variant->servers_text) : 'Inclusive of all taxes · Fast delivery available'; ?></p>
+                    <p id="serversText" class="pdp-tax-note"><?php echo ($has_variants && !empty($default_variant->servers_text)) ? htmlspecialchars($default_variant->servers_text) : 'Price inclusive of all applicable taxes'; ?></p>
                 </div>
 
                 <?php if ($has_variants): ?>
                 <div class="mb-6">
-                    <label class="block text-dark font-bold mb-3">Select Pack</label>
-                    <div class="flex flex-wrap gap-3">
+                    <label class="pdp-field-label">Select option</label>
+                    <div class="flex flex-wrap gap-2.5">
                         <?php foreach ($product->variants as $index => $variant): ?>
                         <?php
                             $variant_discount = 0;
@@ -123,7 +111,7 @@ $about_text = !empty($product->description)
                             <?php if ($variant_discount > 0): ?>
                             <span class="variant-discount-tooltip">SAVE <?php echo $variant_discount; ?>%</span>
                             <?php endif; ?>
-                            <button class="variant-option px-5 py-2.5 border-2 <?php echo $index === 0 ? 'border-secondary bg-secondary/5' : 'border-primary/15 hover:border-secondary'; ?> rounded-full text-sm font-bold transition-colors"
+                            <button type="button" class="variant-option pdp-variant-option <?php echo $index === 0 ? 'border-secondary bg-secondary/5' : ''; ?>"
                                 data-variant-id="<?php echo $variant->id; ?>"
                                 data-price="<?php echo $variant->sale_price; ?>"
                                 data-mrp="<?php echo $variant->mrp; ?>"
@@ -137,29 +125,27 @@ $about_text = !empty($product->description)
                 </div>
                 <?php endif; ?>
 
-                <!-- Quantity -->
                 <div class="mb-6">
-                    <label class="block text-dark font-bold mb-3">Quantity</label>
-                    <div class="inline-flex items-center border border-primary/15 rounded-full overflow-hidden bg-white shadow-sm">
-                        <button id="qtyMinus" class="qty-btn w-11 h-11 flex items-center justify-center text-gray hover:text-primary hover:bg-light-gray transition-colors">
+                    <label class="pdp-field-label" for="productQty">Quantity</label>
+                    <div class="pdp-qty">
+                        <button type="button" id="qtyMinus" class="qty-btn" aria-label="Decrease quantity">
                             <i class="fa-solid fa-minus text-sm"></i>
                         </button>
-                        <input type="number" id="productQty" value="1" min="1" class="w-12 h-11 text-center font-bold text-dark border-x border-primary/15 focus:outline-none">
-                        <button id="qtyPlus" class="qty-btn w-11 h-11 flex items-center justify-center text-gray hover:text-primary hover:bg-light-gray transition-colors">
+                        <input type="number" id="productQty" value="1" min="1" aria-label="Quantity">
+                        <button type="button" id="qtyPlus" class="qty-btn" aria-label="Increase quantity">
                             <i class="fa-solid fa-plus text-sm"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-8">
-                    <button id="addToCartBtn" class="flex-1 btn-primary py-4 text-base flex items-center justify-center gap-2"
+                <div class="pdp-actions">
+                    <button type="button" id="addToCartBtn" class="flex-1 btn-primary flex items-center justify-center gap-2"
                         data-product-id="<?php echo $product->id; ?>"
                         data-variant-id="<?php echo $has_variants ? $default_variant->id : 0; ?>">
                         <i class="fa-solid fa-cart-plus"></i>
                         Add to Cart
                     </button>
-                    <button id="buyNowBtn" class="flex-1 btn-secondary py-4 text-base flex items-center justify-center gap-2"
+                    <button type="button" id="buyNowBtn" class="flex-1 btn-secondary flex items-center justify-center gap-2"
                         data-product-id="<?php echo $product->id; ?>"
                         data-variant-id="<?php echo $has_variants ? $default_variant->id : 0; ?>">
                         <i class="fa-solid fa-bolt"></i>
@@ -167,36 +153,13 @@ $about_text = !empty($product->description)
                     </button>
                 </div>
 
-                <?php if (!empty($product->instructions_image_desktop) || !empty($product->instructions_image_mobile)): ?>
-                <div class="product-instructions-image mb-8">
-                    <?php if (!empty($product->instructions_image_desktop)): ?>
-                    <img src="<?php echo base_url('uploads/products/instructions/') . $product->instructions_image_desktop; ?>"
-                         alt="Product details"
-                         class="w-full h-auto rounded-3xl object-cover hidden md:block card-pop">
-                    <?php endif; ?>
-                    <?php if (!empty($product->instructions_image_mobile)): ?>
-                    <img src="<?php echo base_url('uploads/products/instructions/') . $product->instructions_image_mobile; ?>"
-                         alt="Product details"
-                         class="w-full h-auto rounded-3xl object-cover md:hidden card-pop">
-                    <?php elseif (!empty($product->instructions_image_desktop)): ?>
-                    <img src="<?php echo base_url('uploads/products/instructions/') . $product->instructions_image_desktop; ?>"
-                         alt="Product details"
-                         class="w-full h-auto rounded-3xl object-cover md:hidden card-pop">
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-
-                <!-- Accordions -->
-                <div class="border-t border-primary/10">
-                    <div class="product-accordion border-b border-primary/10">
-                        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-sparkles text-primary"></i>
-                                <span class="font-bold text-dark">About this item</span>
-                            </div>
-                            <i class="fa-solid fa-plus text-gray text-sm transition-transform"></i>
+                <div class="pdp-accordions">
+                    <div class="product-accordion pdp-accordion">
+                        <button type="button" class="accordion-toggle pdp-accordion-toggle">
+                            <span class="pdp-accordion-title">About this product</span>
+                            <i class="fa-solid fa-minus text-gray text-sm transition-transform"></i>
                         </button>
-                        <div class="accordion-content hidden pb-4">
+                        <div class="accordion-content pdp-accordion-body">
                             <div class="text-gray text-sm leading-relaxed prose prose-sm max-w-none">
                                 <?php if (!empty($product->description)): ?>
                                     <?php echo $product->description; ?>
@@ -207,19 +170,16 @@ $about_text = !empty($product->description)
                         </div>
                     </div>
 
-                    <div class="product-accordion border-b border-primary/10">
-                        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-heart text-primary"></i>
-                                <span class="font-bold text-dark">Why Kids Love It</span>
-                            </div>
+                    <div class="product-accordion pdp-accordion">
+                        <button type="button" class="accordion-toggle pdp-accordion-toggle">
+                            <span class="pdp-accordion-title">Highlights</span>
                             <i class="fa-solid fa-plus text-gray text-sm transition-transform"></i>
                         </button>
-                        <div class="accordion-content hidden pb-4">
-                            <ul class="space-y-2 text-gray text-sm">
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Fun, bright designs kids adore</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Collectible &amp; creative — perfect for crafts</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Great for decorating books, bottles &amp; more</li>
+                        <div class="accordion-content hidden pdp-accordion-body">
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Quality-checked products for kids</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Ideal for gifting and everyday use</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Secure packaging for safe delivery</li>
                             </ul>
                             <?php if (!empty($product->short_description)): ?>
                             <p class="text-gray text-sm leading-relaxed mt-4"><?php echo nl2br(htmlspecialchars($product->short_description)); ?></p>
@@ -228,21 +188,18 @@ $about_text = !empty($product->description)
                     </div>
 
                     <?php if (!empty($meta_data) && is_array($meta_data)): ?>
-                    <div class="product-accordion border-b border-primary/10">
-                        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-list-check text-primary"></i>
-                                <span class="font-bold text-dark">Product Details</span>
-                            </div>
+                    <div class="product-accordion pdp-accordion">
+                        <button type="button" class="accordion-toggle pdp-accordion-toggle">
+                            <span class="pdp-accordion-title">Specifications</span>
                             <i class="fa-solid fa-plus text-gray text-sm transition-transform"></i>
                         </button>
-                        <div class="accordion-content hidden pb-4">
-                            <table class="w-full text-sm rounded-2xl overflow-hidden">
+                        <div class="accordion-content hidden pdp-accordion-body">
+                            <table class="w-full text-sm">
                                 <tbody>
                                     <?php foreach ($meta_data as $key => $value): ?>
-                                    <tr class="border-b border-primary/10 last:border-0">
-                                        <td class="py-2.5 pr-4 text-gray font-semibold w-2/5"><?php echo htmlspecialchars($key); ?></td>
-                                        <td class="py-2.5 text-dark"><?php echo htmlspecialchars($value); ?></td>
+                                    <tr class="border-b border-gray-200 last:border-0">
+                                        <td class="py-3 pr-4 text-gray font-medium w-2/5 align-top"><?php echo htmlspecialchars($key); ?></td>
+                                        <td class="py-3 text-dark align-top"><?php echo htmlspecialchars($value); ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -250,49 +207,43 @@ $about_text = !empty($product->description)
                         </div>
                     </div>
                     <?php else: ?>
-                    <div class="product-accordion border-b border-primary/10">
-                        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-list-check text-primary"></i>
-                                <span class="font-bold text-dark">Product Details</span>
-                            </div>
+                    <div class="product-accordion pdp-accordion">
+                        <button type="button" class="accordion-toggle pdp-accordion-toggle">
+                            <span class="pdp-accordion-title">Specifications</span>
                             <i class="fa-solid fa-plus text-gray text-sm transition-transform"></i>
                         </button>
-                        <div class="accordion-content hidden pb-4">
+                        <div class="accordion-content hidden pdp-accordion-body">
                             <table class="w-full text-sm">
                                 <tbody>
-                                    <tr class="border-b border-primary/10"><td class="py-2.5 pr-4 text-gray font-semibold">Type</td><td class="py-2.5 text-dark"><?php echo !empty($product->category) ? htmlspecialchars($product->category->category_name) : 'Kids Product'; ?></td></tr>
-                                    <tr class="border-b border-primary/10"><td class="py-2.5 pr-4 text-gray font-semibold">Brand</td><td class="py-2.5 text-dark">PIKO POP</td></tr>
-                                    <tr><td class="py-2.5 pr-4 text-gray font-semibold">Ideal for</td><td class="py-2.5 text-dark">Kids, gifting &amp; creative play</td></tr>
+                                    <tr class="border-b border-gray-200"><td class="py-3 pr-4 text-gray font-medium">Type</td><td class="py-3 text-dark"><?php echo !empty($product->category) ? htmlspecialchars($product->category->category_name) : 'Kids Product'; ?></td></tr>
+                                    <tr class="border-b border-gray-200"><td class="py-3 pr-4 text-gray font-medium">Brand</td><td class="py-3 text-dark">PIKO POP</td></tr>
+                                    <tr><td class="py-3 pr-4 text-gray font-medium">Ideal for</td><td class="py-3 text-dark">Kids &amp; gifting</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <?php endif; ?>
 
-                    <div class="product-accordion border-b border-primary/10">
-                        <button class="accordion-toggle w-full flex items-center justify-between py-4 text-left">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-shield-heart text-primary"></i>
-                                <span class="font-bold text-dark">Safety &amp; Quality</span>
-                            </div>
+                    <div class="product-accordion pdp-accordion">
+                        <button type="button" class="accordion-toggle pdp-accordion-toggle">
+                            <span class="pdp-accordion-title">Shipping &amp; returns</span>
                             <i class="fa-solid fa-plus text-gray text-sm transition-transform"></i>
                         </button>
-                        <div class="accordion-content hidden pb-4">
-                            <p class="text-gray text-sm leading-relaxed mb-3">PIKO POP products are thoughtfully selected with kids in mind. We focus on quality materials, cheerful designs and a premium unboxing experience parents can trust.</p>
-                            <ul class="space-y-2 text-gray text-sm">
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Quality-checked before shipping</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Safe, kid-friendly product selection</li>
-                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-secondary mt-0.5"></i> Secure packaging for delivery</li>
+                        <div class="accordion-content hidden pdp-accordion-body">
+                            <p class="mb-3">We pack every order with care. Delivery timelines vary by location; you will see updates after checkout.</p>
+                            <ul class="space-y-2">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Free shipping on orders above ₹499</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Easy returns as per store policy</li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-green-600 mt-0.5"></i> Secure payment options at checkout</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-4">
-                    <button id="shareBtn" class="flex items-center gap-2 text-gray hover:text-primary transition-colors">
+                <div class="pt-6">
+                    <button type="button" id="shareBtn" class="flex items-center gap-2 text-gray hover:text-primary transition-colors">
                         <i class="fa-solid fa-share-nodes"></i>
-                        <span class="text-sm font-semibold">Share this cute find</span>
+                        <span class="text-sm font-medium">Share product</span>
                     </button>
                 </div>
             </div>
@@ -300,11 +251,11 @@ $about_text = !empty($product->description)
     </div>
 
     <?php if (!empty($related_products)): ?>
-    <section class="py-10 md:py-16 section-pastel-purple border-t border-primary/10">
-        <div class="container mx-auto px-4">
-            <div class="flex items-end justify-between mb-6 md:mb-8">
-                <h2 class="section-title">You May Also Like</h2>
-                <a href="<?php echo base_url('shop'); ?>" class="text-primary font-bold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
+    <section class="pdp-related">
+        <div class="page-container">
+            <div class="flex items-end justify-between mb-8">
+                <h2 class="pdp-related-title">You may also like</h2>
+                <a href="<?php echo base_url('shop'); ?>" class="text-primary font-semibold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
                     View all <i class="fa-solid fa-arrow-right text-xs"></i>
                 </a>
             </div>
@@ -332,7 +283,7 @@ $about_text = !empty($product->description)
                 <div class="product-listing-card product-card group">
                     <div class="relative">
                         <a href="<?php echo product_url($rel_product); ?>" class="block">
-                            <div class="aspect-square bg-light-gray rounded-t-3xl overflow-hidden relative">
+                            <div class="aspect-square bg-gray-50 rounded-t-xl overflow-hidden relative border border-gray-200 border-b-0">
                                 <img src="<?php echo $rel_image_url; ?>" alt="<?php echo htmlspecialchars($rel_product->product_name); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                                 <?php if ($rel_discount > 0): ?>
                                 <span class="absolute top-3 left-3 badge badge-primary z-10"><?php echo $rel_discount; ?>% OFF</span>
@@ -366,4 +317,4 @@ $about_text = !empty($product->description)
         </div>
     </section>
     <?php endif; ?>
-</main>
+</div>

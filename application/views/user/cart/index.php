@@ -22,7 +22,7 @@ $coupon_discount = !empty($applied_coupon) ? $applied_coupon['discount_amount'] 
 $cart_total = $cart_subtotal - $coupon_discount + $shipping_charge;
 ?>
 <!-- Main Content -->
-<main class="min-h-screen bg-brand-bg">
+<div class="site-page">
     <!-- Breadcrumb -->
     <div class="bg-white/80 backdrop-blur-sm border-b border-primary/10">
         <div class="container mx-auto px-4 py-3">
@@ -283,7 +283,7 @@ $cart_total = $cart_subtotal - $coupon_discount + $shipping_charge;
             </div>
         <?php endif; ?>
     </div>
-</main>
+</div>
 
 
 <style>

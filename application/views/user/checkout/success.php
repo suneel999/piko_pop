@@ -23,7 +23,7 @@
 </div>
 
 <!-- Main Content -->
-<main class="min-h-screen bg-brand-bg py-8 md:py-12">
+<div class="site-page py-8 md:py-12">
     <div class="container mx-auto px-4">
         <div class="max-w-lg mx-auto">
 
@@ -235,7 +235,7 @@
 
         </div>
     </div>
-</main>
+</div>
 
 <!-- Success Page Styles -->
 <style>

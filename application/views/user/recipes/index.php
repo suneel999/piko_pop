@@ -1,4 +1,4 @@
-<main class="min-h-screen bg-brand-bg">
+<div class="site-page">
     <!-- Breadcrumb -->
     <div class="bg-white/80 border-b border-primary/10">
         <div class="container mx-auto px-4 py-3">
@@ -68,4 +68,4 @@
             </div>
         <?php endif; ?>
     </div>
-</main>
+</div>

@@ -12,7 +12,7 @@ $sticker_filters = array(
 );
 ?>
 <!-- Main Content -->
-<main class="min-h-screen bg-brand-bg">
+<div class="site-page">
     <!-- Playful page header -->
     <section class="relative overflow-hidden border-b border-primary/10 bg-gradient-to-br from-brand-bg via-light-gray to-primary/10">
         <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -231,4 +231,4 @@ $sticker_filters = array(
         </div>
         <?php endif; ?>
     </div>
-</main>
+</div>
