@@ -117,13 +117,19 @@ if ($is_logged_in) {
     <!-- Header -->
     <header class="site-header site-header-premium">
         <div class="page-container">
+            <div class="site-header-mobile-brand lg:hidden">
+                <a href="<?php echo base_url(); ?>" class="site-header-logo-link">
+                    <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-header-logo site-header-logo--mobile">
+                </a>
+            </div>
+
             <!-- Main header row -->
             <div class="site-header-top">
                 <button id="menuToggle" class="site-header-menu lg:hidden" aria-label="Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
-                <a href="<?php echo base_url(); ?>" class="site-header-logo-link">
+                <a href="<?php echo base_url(); ?>" class="site-header-logo-link hidden lg:flex">
                     <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-header-logo">
                 </a>
 

@@ -4,7 +4,7 @@
 
     <div class="page-container hero-inner">
         <div class="hero-grid">
-            <div class="hero-copy">
+            <div class="hero-copy order-2 lg:order-1">
                 <span class="hero-welcome-badge">PIKO POP Store</span>
                 <h1 class="hero-title">
                     Quality Kids Products,<br>
@@ -28,7 +28,7 @@
                 </ul>
             </div>
 
-            <div class="hero-visual">
+            <div class="hero-visual order-1 lg:order-2">
                 <?php
                 $hero_image = brand_image_url('hero1.jpeg');
                 if (!$hero_image) {
