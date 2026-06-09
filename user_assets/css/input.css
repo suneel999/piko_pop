@@ -1582,4 +1582,16 @@
   .category-grid {
     @apply grid-cols-2 gap-3;
   }
+
+  .why-piko-grid {
+    @apply grid-cols-2 gap-3;
+  }
+
+  .why-piko-card {
+    @apply p-4;
+  }
+
+  .home-product-card {
+    @apply w-[72%] sm:w-[48%];
+  }
 }

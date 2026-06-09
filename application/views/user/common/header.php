@@ -108,8 +108,9 @@ if ($is_logged_in) {
 
     <!-- Announcement Bar -->
     <div class="announcement-bar">
-        <div class="page-container py-2.5 text-center text-xs sm:text-sm font-medium tracking-wide">
-            Free shipping on orders above ₹499 &nbsp;·&nbsp; Easy returns &nbsp;·&nbsp; Secure checkout
+        <div class="page-container py-2 sm:py-2.5 text-center text-[11px] sm:text-sm font-medium leading-snug">
+            <span class="sm:hidden">Free shipping on orders ₹499+ · Secure checkout</span>
+            <span class="hidden sm:inline">Free shipping on orders above ₹499 &nbsp;·&nbsp; Easy returns &nbsp;·&nbsp; Secure checkout</span>
         </div>
     </div>
 
@@ -118,13 +119,13 @@ if ($is_logged_in) {
         <div class="page-container">
             <!-- Main header row -->
             <div class="site-header-top">
-                <a href="<?php echo base_url(); ?>" class="site-header-logo-link flex-shrink-0">
-                    <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-header-logo">
-                </a>
-
-                <button id="menuToggle" class="lg:hidden text-xl text-dark hover:text-primary transition-colors p-2 rounded-full hover:bg-primary/10" aria-label="Menu">
+                <button id="menuToggle" class="site-header-menu lg:hidden" aria-label="Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
+
+                <a href="<?php echo base_url(); ?>" class="site-header-logo-link">
+                    <img src="<?php echo brand_logo_url(); ?>" alt="PIKO POP" class="site-header-logo">
+                </a>
 
                 <!-- Desktop search -->
                 <form action="<?php echo base_url('shop/search'); ?>" method="get" class="site-header-search hidden md:flex">
@@ -136,8 +137,8 @@ if ($is_logged_in) {
                     </div>
                 </form>
 
-                <div class="flex items-center gap-1 sm:gap-2 md:gap-3 ml-auto">
-                    <button id="searchToggle" class="md:hidden w-10 h-10 rounded-full bg-white/80 border border-primary/10 flex items-center justify-center text-dark hover:text-primary hover:border-primary/30 transition-all" aria-label="Search">
+                <div class="site-header-actions">
+                    <button id="searchToggle" class="site-header-icon-btn md:hidden" aria-label="Search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
 
@@ -159,7 +160,7 @@ if ($is_logged_in) {
                         </a>
                     <?php endif; ?>
 
-                    <a href="<?php echo base_url('cart'); ?>" class="header-action-pill" aria-label="Cart">
+                    <a href="<?php echo base_url('cart'); ?>" class="header-action-pill header-action-pill--cart" aria-label="Cart">
                         <span class="header-action-icon"><i class="fa-solid fa-bag-shopping"></i></span>
                         <span class="header-action-label hidden sm:inline">Cart</span>
                         <span class="cart-count header-badge <?php echo $cart_count == 0 ? 'hidden' : ''; ?>"><?php echo $cart_count; ?></span>
@@ -417,7 +418,7 @@ if ($is_logged_in) {
     </aside>
 
     <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/919542200222" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg hover:bg-green-600 transition-colors z-50">
+    <a href="https://wa.me/919542200222" target="_blank" class="site-whatsapp-btn fixed bottom-5 right-4 sm:bottom-6 sm:right-6 w-12 h-12 sm:w-14 sm:h-14 bg-green-500 rounded-full flex items-center justify-center text-white text-xl sm:text-2xl shadow-lg hover:bg-green-600 transition-colors z-50" aria-label="Chat on WhatsApp">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 

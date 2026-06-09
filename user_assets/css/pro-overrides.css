@@ -821,4 +821,312 @@
   .about-cta-actions {
     @apply flex flex-col sm:flex-row items-center justify-center gap-3;
   }
+
+  /* Header layout helpers */
+  .site-header-menu {
+    @apply w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-dark hover:text-primary hover:border-gray-300 transition-colors flex-shrink-0;
+  }
+
+  .site-header-logo-link {
+    @apply flex-shrink-0 min-w-0;
+  }
+
+  .site-header-actions {
+    @apply flex items-center gap-1 sm:gap-2 md:gap-3 ml-auto flex-shrink-0;
+  }
+
+  .site-header-icon-btn {
+    @apply w-10 h-10 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-dark hover:text-primary hover:border-gray-300 transition-colors flex-shrink-0;
+  }
+
+  .site-whatsapp-btn {
+    @apply shadow-lg;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 639px) {
+    .page-container {
+      @apply px-4;
+    }
+
+    main {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .site-header-top {
+      display: grid;
+      grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.5rem;
+      @apply py-2.5;
+    }
+
+    .site-header-menu {
+      grid-column: 1;
+    }
+
+    .site-header-logo-link {
+      grid-column: 2;
+      @apply flex justify-center;
+    }
+
+    .site-header-actions {
+      grid-column: 3;
+      @apply ml-0 gap-1;
+    }
+
+    .site-header-logo {
+      @apply h-10 max-w-[148px];
+    }
+
+    .site-header-logo--sm {
+      @apply h-10 max-w-[140px];
+    }
+
+    .header-action-pill {
+      @apply px-2 py-1.5 gap-1;
+    }
+
+    .header-action-pill--cart .header-action-label {
+      @apply hidden;
+    }
+
+    .header-action-icon {
+      @apply w-8 h-8 text-sm;
+    }
+
+    .mobile-sidebar {
+      @apply w-[min(100vw,320px)] max-w-[88%];
+    }
+
+    .home-section {
+      @apply py-10;
+    }
+
+    .section-header {
+      @apply mb-8;
+    }
+
+    .hero-inner {
+      @apply py-8;
+    }
+
+    .hero-title {
+      @apply text-2xl leading-tight;
+    }
+
+    .hero-subtitle {
+      @apply text-sm mt-3;
+    }
+
+    .hero-actions .btn-primary,
+    .hero-actions .btn-outline {
+      @apply w-full px-6 py-3;
+    }
+
+    .hero-trust-list {
+      @apply flex-col items-start gap-2 mt-6;
+    }
+
+    .page-breadcrumb-inner {
+      @apply py-2.5;
+    }
+
+    .page-breadcrumb nav {
+      @apply text-xs gap-1.5;
+    }
+
+    .pdp-shell,
+    .shop-shell {
+      @apply py-5;
+    }
+
+    .pdp-layout {
+      @apply gap-6;
+    }
+
+    .pdp-title {
+      @apply text-xl mb-2;
+    }
+
+    .pdp-meta {
+      @apply text-xs mb-4;
+    }
+
+    .pdp-price-box {
+      @apply p-4 mb-4;
+    }
+
+    .pdp-price-current {
+      @apply text-2xl;
+    }
+
+    .pdp-main-image img {
+      @apply p-3;
+    }
+
+    .pdp-thumb-list .thumbnail-btn {
+      @apply w-16 h-16;
+    }
+
+    .pdp-actions {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      @apply flex-row gap-2 mb-0 pt-0 px-4 bg-white border-t border-gray-200;
+      padding-top: 0.75rem;
+      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .pdp-actions .btn-primary,
+    .pdp-actions .btn-secondary {
+      @apply py-3 text-sm;
+    }
+
+    .pdp-page {
+      padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    body:has(.pdp-page) .site-whatsapp-btn {
+      bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .pdp-related {
+      @apply py-10;
+    }
+
+    .shop-header {
+      @apply gap-4 mb-6 pb-6;
+    }
+
+    .shop-title {
+      @apply text-xl;
+    }
+
+    .shop-subtitle,
+    .shop-meta {
+      @apply text-xs;
+    }
+
+    .shop-sort {
+      @apply w-full;
+    }
+
+    .shop-sort-select-wrap {
+      @apply w-full;
+    }
+
+    .shop-sort-select {
+      @apply w-full min-w-0;
+    }
+
+    .shop-filters {
+      @apply mb-5;
+    }
+
+    .shop-filters--scroll {
+      @apply mb-6;
+    }
+
+    .shop-filter-chip {
+      @apply px-3 py-1.5 text-xs;
+    }
+
+    .shop-grid {
+      @apply gap-3;
+    }
+
+    .shop-product-body {
+      @apply p-3;
+    }
+
+    .shop-product-name {
+      @apply text-xs mb-2 min-h-[2.25rem];
+    }
+
+    .shop-product-price-current {
+      @apply text-sm;
+    }
+
+    .shop-product-wishlist {
+      @apply w-8 h-8 top-2 right-2;
+    }
+
+    .shop-product-badge {
+      @apply top-2 left-2 px-2 py-0.5 text-[10px];
+    }
+
+    .shop-product-body .add-to-cart-btn,
+    .shop-product-body .choose-options-btn {
+      @apply py-2.5 text-xs;
+    }
+
+    .about-hero {
+      @apply py-8;
+    }
+
+    .about-hero-grid {
+      @apply gap-8;
+    }
+
+    .about-hero-title {
+      @apply text-xl;
+    }
+
+    .about-hero-text {
+      @apply text-sm;
+    }
+
+    .about-section {
+      @apply py-10;
+    }
+
+    .about-section-title {
+      @apply text-xl mb-4;
+    }
+
+    .about-split {
+      @apply gap-8;
+    }
+
+    .about-stats {
+      @apply grid-cols-1 gap-3;
+    }
+
+    .about-stat-card {
+      @apply p-4;
+    }
+
+    .about-collection-card {
+      @apply p-4;
+    }
+
+    .about-cta {
+      @apply py-10;
+    }
+
+    .about-cta-title {
+      @apply text-xl;
+    }
+
+    .about-cta-actions .btn-primary,
+    .about-cta-actions .btn-outline {
+      @apply w-full;
+    }
+
+    .site-footer-trust-grid {
+      @apply grid-cols-1 gap-4;
+    }
+
+    .site-footer-main {
+      @apply py-8;
+    }
+
+    .site-footer-grid {
+      @apply gap-8;
+    }
+  }
 }
