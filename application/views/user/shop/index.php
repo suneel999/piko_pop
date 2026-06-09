@@ -10,243 +10,216 @@ $sticker_filters = array(
     array('label' => 'Emoji', 'query' => 'Emoji Stickers'),
     array('label' => 'Glow Collection', 'query' => 'Glow Stickers'),
 );
-$shop_heading = isset($search_keyword) ? 'Search Results' : 'Explore Cute Collections';
+$shop_heading = isset($search_keyword) ? 'Search Results' : 'Shop All Products';
 $shop_subheading = isset($search_keyword)
-    ? 'Finding adorable picks for "' . htmlspecialchars($search_keyword) . '"'
-    : 'Find your favorite PIKO POP stickers, toys, stationery &amp; gifts';
+    ? 'Results for "' . htmlspecialchars($search_keyword) . '"'
+    : 'Stickers, stationery, toys and gifts for kids';
 ?>
-<!-- Main Content -->
-<div class="site-page">
-    <!-- Playful page header -->
-    <section class="relative overflow-hidden border-b border-primary/10 bg-gradient-to-br from-brand-bg via-light-gray to-accent-blue/10">
-        <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div class="absolute -top-10 -left-8 w-40 h-40 rounded-full bg-primary/10 blur-2xl"></div>
-            <div class="absolute top-6 right-[8%] w-28 h-28 rounded-full bg-secondary/10 blur-xl"></div>
-            <div class="absolute bottom-4 left-[20%] text-accent-yellow/70 text-lg"><i class="fa-solid fa-star"></i></div>
-            <div class="absolute top-8 left-[12%] text-primary/40 text-sm"><i class="fa-solid fa-sparkles"></i></div>
-            <div class="absolute top-12 right-[22%] hidden md:block w-10 h-10 rounded-full bg-accent-blue/20"></div>
-            <div class="absolute bottom-8 right-[15%] hidden md:block w-14 h-14 rounded-2xl bg-accent-yellow/20 rotate-12"></div>
+<div class="site-page shop-page">
+    <div class="page-breadcrumb">
+        <div class="page-container page-breadcrumb-inner">
+            <nav class="flex items-center gap-2 text-sm flex-wrap">
+                <a href="<?php echo base_url(); ?>">Home</a>
+                <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                <span class="text-dark font-medium"><?php echo isset($search_keyword) ? 'Search' : 'Shop'; ?></span>
+            </nav>
+        </div>
+    </div>
+
+    <div class="page-container shop-shell">
+        <div class="shop-header">
+            <div class="shop-header-copy">
+                <h1 class="shop-title"><?php echo $shop_heading; ?></h1>
+                <p class="shop-subtitle"><?php echo $shop_subheading; ?></p>
+                <p class="shop-meta">
+                    <?php if ($total_products > 0): ?>
+                        Showing <?php echo $showing_from; ?>–<?php echo $showing_to; ?> of <?php echo $total_products; ?> products
+                    <?php else: ?>
+                        No products found
+                    <?php endif; ?>
+                </p>
+            </div>
+
+            <?php if ($total_products > 0): ?>
+            <div class="shop-sort">
+                <label for="sortSelect" class="shop-sort-label">Sort by</label>
+                <div class="shop-sort-select-wrap">
+                    <select id="sortSelect" class="shop-sort-select">
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-az">Name: A to Z</option>
+                        <option value="name-za">Name: Z to A</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down shop-sort-chevron"></i>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
 
-        <div class="container mx-auto px-4 py-5 md:py-8 relative z-10">
-            <nav class="flex items-center gap-2 text-sm mb-4 md:mb-6">
-                <a href="<?php echo base_url(); ?>" class="text-gray hover:text-primary transition-colors">Home</a>
-                <i class="fa-solid fa-chevron-right text-xs text-gray-400"></i>
-                <span class="text-dark font-semibold"><?php echo isset($search_keyword) ? 'Search' : 'Shop'; ?></span>
-            </nav>
-
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-                <div class="max-w-2xl">
-                    <span class="badge badge-primary mb-3">PIKO POP Shop</span>
-                    <h1 class="text-2xl md:text-4xl font-bold text-dark leading-tight"><?php echo $shop_heading; ?></h1>
-                    <p class="text-gray text-sm md:text-base mt-2"><?php echo $shop_subheading; ?></p>
-                    <p class="text-gray text-xs md:text-sm mt-2">
-                        <?php if ($total_products > 0): ?>
-                            Showing <?php echo $showing_from; ?>–<?php echo $showing_to; ?> of <?php echo $total_products; ?> cute finds
-                        <?php else: ?>
-                            No cute finds here yet ✨
-                        <?php endif; ?>
-                    </p>
-                </div>
-
-                <?php if ($total_products > 0): ?>
-                <div class="flex items-center gap-3">
-                    <label class="text-sm text-gray whitespace-nowrap hidden sm:block">Sort by</label>
-                    <div class="relative">
-                        <select id="sortSelect" class="appearance-none bg-white border border-primary/15 rounded-full px-5 py-2.5 pr-10 text-sm font-semibold text-dark focus:outline-none focus:border-primary cursor-pointer min-w-[170px] shadow-sm">
-                            <option value="newest">Newest First</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name-az">Name: A to Z</option>
-                            <option value="name-za">Name: Z to A</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray pointer-events-none"></i>
-                    </div>
-                </div>
-                <?php endif; ?>
+        <?php if (!empty($all_categories)): ?>
+        <div class="shop-filters">
+            <p class="shop-filter-label">Categories</p>
+            <div class="shop-filter-list">
+                <a href="<?php echo base_url('shop'); ?>" class="shop-filter-chip <?php echo !isset($search_keyword) ? 'is-active' : ''; ?>">
+                    All Products
+                </a>
+                <?php foreach ($all_categories as $cat): ?>
+                <a href="<?php echo category_url($cat); ?>" class="shop-filter-chip">
+                    <?php echo htmlspecialchars($cat->category_name); ?>
+                </a>
+                <?php endforeach; ?>
             </div>
         </div>
-    </section>
+        <?php endif; ?>
 
-    <?php if (!empty($all_categories)): ?>
-    <!-- Category filters -->
-    <div class="container mx-auto px-4 py-5 md:py-6">
-        <p class="text-sm font-bold text-dark mb-3">Browse by category</p>
-        <div class="flex flex-wrap gap-2 md:gap-3">
-            <a href="<?php echo base_url('shop'); ?>" class="px-4 py-2 rounded-full text-sm font-bold transition-all <?php echo !isset($search_keyword) ? 'bg-primary text-white shadow-md shadow-primary/20' : 'bg-white border border-primary/15 text-dark hover:border-primary hover:text-primary'; ?>">
-                All Products
-            </a>
-            <?php foreach ($all_categories as $cat): ?>
-            <a href="<?php echo category_url($cat); ?>" class="px-4 py-2 bg-white border border-primary/15 rounded-full text-sm font-semibold text-dark hover:border-secondary hover:text-secondary transition-all">
-                <?php echo htmlspecialchars($cat->category_name); ?>
-            </a>
-            <?php endforeach; ?>
+        <div class="shop-filters shop-filters--scroll">
+            <p class="shop-filter-label">Sticker collections</p>
+            <div class="shop-filter-list shop-filter-list--scroll">
+                <?php foreach ($sticker_filters as $filter): ?>
+                <a href="<?php echo base_url('shop/search?q=' . urlencode($filter['query'])); ?>" class="shop-filter-chip shop-filter-chip--outline">
+                    <?php echo $filter['label']; ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
-    <?php endif; ?>
 
-    <!-- Sticker collection filters -->
-    <div class="container mx-auto px-4 pb-5 md:pb-6">
-        <p class="text-sm font-bold text-dark mb-3">Sticker collections</p>
-        <div class="flex overflow-x-auto gap-2 pb-1 hide-scrollbar">
-            <?php foreach ($sticker_filters as $filter): ?>
-            <a href="<?php echo base_url('shop/search?q=' . urlencode($filter['query'])); ?>" class="flex-shrink-0 px-4 py-2 rounded-full bg-secondary/10 text-secondary border border-secondary/15 text-sm font-semibold whitespace-nowrap hover:bg-secondary hover:text-white transition-all">
-                <?php echo $filter['label']; ?>
-            </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
+        <div class="shop-products">
+            <?php if (!empty($products)): ?>
+            <div class="shop-grid">
+                <?php foreach ($products as $product): ?>
+                <?php
+                    $first_image = !empty($product->images_array) ? $product->images_array[0] : '';
+                    $image_url = !empty($first_image) ? base_url('uploads/products/' . $first_image) : base_url('user_assets/images/product-fallback.png');
 
-    <!-- Products Grid -->
-    <div class="container mx-auto px-4 pb-12 md:pb-16">
-        <?php if (!empty($products)): ?>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            <?php foreach ($products as $product): ?>
-            <?php
-                $first_image = !empty($product->images_array) ? $product->images_array[0] : '';
-                $image_url = !empty($first_image) ? base_url('uploads/products/' . $first_image) : base_url('user_assets/images/product-fallback.png');
+                    $has_variants = !empty($product->variants) && count($product->variants) > 0;
+                    if ($has_variants) {
+                        $min_price = $product->variants[0]->sale_price;
+                        $min_mrp = $product->variants[0]->mrp;
+                    } else {
+                        $min_price = $product->sale_price;
+                        $min_mrp = $product->mrp;
+                    }
 
-                $has_variants = !empty($product->variants) && count($product->variants) > 0;
-                if ($has_variants) {
-                    $min_price = $product->variants[0]->sale_price;
-                    $min_mrp = $product->variants[0]->mrp;
-                } else {
-                    $min_price = $product->sale_price;
-                    $min_mrp = $product->mrp;
-                }
+                    $discount = 0;
+                    if ($min_mrp > $min_price) {
+                        $discount = round((($min_mrp - $min_price) / $min_mrp) * 100);
+                    }
+                ?>
+                <div class="shop-product-card product-listing-card product-card group">
+                    <div class="relative">
+                        <a href="<?php echo product_url($product); ?>" class="block">
+                            <div class="shop-product-image">
+                                <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($product->product_name); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                                <?php if ($discount > 0): ?>
+                                <span class="shop-product-badge"><?php echo $discount; ?>% OFF</span>
+                                <?php endif; ?>
+                            </div>
+                        </a>
+                        <a href="<?php echo base_url('wishlist'); ?>" class="shop-product-wishlist" aria-label="Wishlist">
+                            <i class="fa-regular fa-heart"></i>
+                        </a>
+                    </div>
 
-                $discount = 0;
-                if ($min_mrp > $min_price) {
-                    $discount = round((($min_mrp - $min_price) / $min_mrp) * 100);
-                }
+                    <div class="shop-product-body">
+                        <a href="<?php echo product_url($product); ?>">
+                            <h3 class="shop-product-name"><?php echo htmlspecialchars($product->product_name); ?></h3>
+                        </a>
 
-                $category_label = !empty($product->category_name) ? $product->category_name : 'Kids Favorite';
-            ?>
-            <div class="product-listing-card product-card group">
-                <div class="relative">
-                    <a href="<?php echo product_url($product); ?>" class="block">
-                        <div class="aspect-square bg-light-gray rounded-t-3xl overflow-hidden relative">
-                            <img src="<?php echo $image_url; ?>" alt="<?php echo htmlspecialchars($product->product_name); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
-                            <span class="absolute top-3 left-3 badge badge-yellow z-10">⭐ <?php echo htmlspecialchars($category_label); ?></span>
+                        <div class="shop-product-price">
+                            <span class="shop-product-price-current">₹<?php echo number_format($min_price, 0); ?></span>
+                            <?php if ($has_variants): ?><span class="shop-product-price-note">onwards</span><?php endif; ?>
                             <?php if ($discount > 0): ?>
-                            <span class="absolute top-3 right-12 badge badge-primary z-10"><?php echo $discount; ?>% OFF</span>
+                            <span class="shop-product-price-mrp">MRP ₹<?php echo number_format($min_mrp, 0); ?></span>
                             <?php endif; ?>
                         </div>
-                    </a>
-                    <a href="<?php echo base_url('wishlist'); ?>" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/95 shadow-md flex items-center justify-center text-gray hover:text-primary hover:scale-110 transition-all z-10" aria-label="Wishlist">
-                        <i class="fa-regular fa-heart"></i>
-                    </a>
-                </div>
 
-                <div class="p-4">
-                    <a href="<?php echo product_url($product); ?>">
-                        <h3 class="font-bold text-dark text-sm md:text-base mb-2 line-clamp-2 min-h-[2.5rem] group-hover:text-primary transition-colors"><?php echo htmlspecialchars($product->product_name); ?></h3>
-                    </a>
-
-                    <div class="flex items-center gap-0.5 mb-2 text-accent-yellow text-xs">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-
-                    <div class="mb-3">
-                        <p class="text-primary font-bold text-base md:text-lg">
-                            ₹<?php echo number_format($min_price, 0); ?>
-                            <?php if ($has_variants): ?><span class="text-xs font-semibold text-gray"> onwards</span><?php endif; ?>
-                        </p>
-                        <?php if ($discount > 0): ?>
-                        <p class="text-xs text-gray mt-0.5">
-                            <span class="line-through">MRP ₹<?php echo number_format($min_mrp, 0); ?></span>
-                            <span class="text-secondary font-bold ml-1">Save <?php echo $discount; ?>%</span>
-                        </p>
+                        <?php if ($has_variants): ?>
+                        <a href="<?php echo product_url($product); ?>" class="choose-options-btn w-full text-center">Choose options</a>
+                        <?php else: ?>
+                        <button class="add-to-cart-btn add-to-cart-btn-action w-full" data-product-id="<?php echo $product->id; ?>" data-variant-id="0">
+                            <span><i class="fa-solid fa-cart-plus mr-1"></i> Add to Cart</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                         <?php endif; ?>
                     </div>
-
-                    <?php if ($has_variants): ?>
-                    <a href="<?php echo product_url($product); ?>" class="choose-options-btn w-full text-center">Choose options</a>
-                    <?php else: ?>
-                    <button class="add-to-cart-btn add-to-cart-btn-action w-full" data-product-id="<?php echo $product->id; ?>" data-variant-id="0">
-                        <span><i class="fa-solid fa-cart-plus mr-1"></i> Add to Cart</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                    <?php endif; ?>
                 </div>
+                <?php endforeach; ?>
             </div>
-            <?php endforeach; ?>
-        </div>
 
-        <?php if ($total_pages > 1): ?>
-        <div class="flex items-center justify-center gap-2 mt-10 md:mt-12 flex-wrap">
-            <?php
-            $base_url = isset($search_keyword) ? base_url('shop/search') : base_url('shop');
-            $separator = '?';
-            $extra_params = isset($search_keyword) ? 'q=' . urlencode($search_keyword) . '&' : '';
-            ?>
+            <?php if ($total_pages > 1): ?>
+            <div class="shop-pagination">
+                <?php
+                $base_url = isset($search_keyword) ? base_url('shop/search') : base_url('shop');
+                $separator = '?';
+                $extra_params = isset($search_keyword) ? 'q=' . urlencode($search_keyword) . '&' : '';
+                ?>
 
-            <?php if ($current_page > 1): ?>
-            <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . ($current_page - 1); ?>" class="w-10 h-10 rounded-full border border-primary/15 bg-white flex items-center justify-center text-gray hover:border-primary hover:text-primary transition-colors">
-                <i class="fa-solid fa-chevron-left text-sm"></i>
-            </a>
-            <?php else: ?>
-            <button class="w-10 h-10 rounded-full border border-primary/15 bg-white flex items-center justify-center text-gray opacity-50 cursor-not-allowed" disabled>
-                <i class="fa-solid fa-chevron-left text-sm"></i>
-            </button>
-            <?php endif; ?>
+                <?php if ($current_page > 1): ?>
+                <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . ($current_page - 1); ?>" class="shop-page-btn" aria-label="Previous page">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </a>
+                <?php else: ?>
+                <span class="shop-page-btn is-disabled" aria-hidden="true">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </span>
+                <?php endif; ?>
 
-            <?php
-            $range = 2;
-            $start_page = max(1, $current_page - $range);
-            $end_page = min($total_pages, $current_page + $range);
-            ?>
+                <?php
+                $range = 2;
+                $start_page = max(1, $current_page - $range);
+                $end_page = min($total_pages, $current_page + $range);
+                ?>
 
-            <?php if ($start_page > 1): ?>
-            <a href="<?php echo $base_url . $separator . $extra_params . 'page=1'; ?>" class="w-10 h-10 rounded-full border border-primary/15 bg-white text-dark font-semibold hover:border-primary hover:text-primary transition-colors flex items-center justify-center">1</a>
-            <?php if ($start_page > 2): ?><span class="px-2 text-gray">...</span><?php endif; ?>
-            <?php endif; ?>
+                <?php if ($start_page > 1): ?>
+                <a href="<?php echo $base_url . $separator . $extra_params . 'page=1'; ?>" class="shop-page-btn">1</a>
+                <?php if ($start_page > 2): ?><span class="shop-page-ellipsis">...</span><?php endif; ?>
+                <?php endif; ?>
 
-            <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
-            <?php if ($i == $current_page): ?>
-            <button class="w-10 h-10 rounded-full bg-primary text-white font-bold shadow-md shadow-primary/25"><?php echo $i; ?></button>
-            <?php else: ?>
-            <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . $i; ?>" class="w-10 h-10 rounded-full border border-primary/15 bg-white text-dark font-semibold hover:border-primary hover:text-primary transition-colors flex items-center justify-center"><?php echo $i; ?></a>
-            <?php endif; ?>
-            <?php endfor; ?>
+                <?php for ($i = $start_page; $i <= $end_page; $i++): ?>
+                <?php if ($i == $current_page): ?>
+                <span class="shop-page-btn is-active"><?php echo $i; ?></span>
+                <?php else: ?>
+                <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . $i; ?>" class="shop-page-btn"><?php echo $i; ?></a>
+                <?php endif; ?>
+                <?php endfor; ?>
 
-            <?php if ($end_page < $total_pages): ?>
-            <?php if ($end_page < $total_pages - 1): ?><span class="px-2 text-gray">...</span><?php endif; ?>
-            <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . $total_pages; ?>" class="w-10 h-10 rounded-full border border-primary/15 bg-white text-dark font-semibold hover:border-primary hover:text-primary transition-colors flex items-center justify-center"><?php echo $total_pages; ?></a>
-            <?php endif; ?>
+                <?php if ($end_page < $total_pages): ?>
+                <?php if ($end_page < $total_pages - 1): ?><span class="shop-page-ellipsis">...</span><?php endif; ?>
+                <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . $total_pages; ?>" class="shop-page-btn"><?php echo $total_pages; ?></a>
+                <?php endif; ?>
 
-            <?php if ($current_page < $total_pages): ?>
-            <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . ($current_page + 1); ?>" class="w-10 h-10 rounded-full border border-primary/15 bg-white flex items-center justify-center text-gray hover:border-primary hover:text-primary transition-colors">
-                <i class="fa-solid fa-chevron-right text-sm"></i>
-            </a>
-            <?php else: ?>
-            <button class="w-10 h-10 rounded-full border border-primary/15 bg-white flex items-center justify-center text-gray opacity-50 cursor-not-allowed" disabled>
-                <i class="fa-solid fa-chevron-right text-sm"></i>
-            </button>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php else: ?>
-        <div class="text-center py-16 md:py-20 card-pop max-w-lg mx-auto px-6">
-            <div class="w-20 h-20 mx-auto mb-5 rounded-3xl bg-primary/15 flex items-center justify-center">
-                <i class="fa-solid fa-face-smile text-4xl text-primary"></i>
+                <?php if ($current_page < $total_pages): ?>
+                <a href="<?php echo $base_url . $separator . $extra_params . 'page=' . ($current_page + 1); ?>" class="shop-page-btn" aria-label="Next page">
+                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                </a>
+                <?php else: ?>
+                <span class="shop-page-btn is-disabled" aria-hidden="true">
+                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                </span>
+                <?php endif; ?>
             </div>
-            <h3 class="text-xl font-bold text-dark mb-2">No cute finds here yet ✨</h3>
-            <?php if (isset($search_keyword)): ?>
-            <p class="text-gray mb-6 text-sm">We couldn't find anything for "<?php echo htmlspecialchars($search_keyword); ?>". Try another search!</p>
-            <a href="<?php echo base_url('shop'); ?>" class="btn-primary inline-flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i>
-                Browse All Products
-            </a>
+            <?php endif; ?>
+
             <?php else: ?>
-            <p class="text-gray mb-6 text-sm">New adorable products are on the way. Check back soon!</p>
-            <a href="<?php echo base_url(); ?>" class="btn-primary inline-flex items-center gap-2">
-                <i class="fa-solid fa-home"></i>
-                Back to Home
-            </a>
+            <div class="shop-empty">
+                <div class="shop-empty-icon"><i class="fa-solid fa-box-open"></i></div>
+                <h3 class="shop-empty-title"><?php echo isset($search_keyword) ? 'No results found' : 'No products yet'; ?></h3>
+                <?php if (isset($search_keyword)): ?>
+                <p class="shop-empty-text">We couldn't find anything for "<?php echo htmlspecialchars($search_keyword); ?>". Try another search.</p>
+                <a href="<?php echo base_url('shop'); ?>" class="btn-primary inline-flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Browse All Products
+                </a>
+                <?php else: ?>
+                <p class="shop-empty-text">New products are on the way. Check back soon.</p>
+                <a href="<?php echo base_url(); ?>" class="btn-primary inline-flex items-center gap-2">
+                    <i class="fa-solid fa-home"></i>
+                    Back to Home
+                </a>
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
         </div>
-        <?php endif; ?>
     </div>
 </div>

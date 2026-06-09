@@ -24,8 +24,8 @@ $about_text = !empty($product->description)
 ?>
 <!-- Product Detail Page -->
 <div class="pdp-page">
-    <div class="pdp-breadcrumb">
-        <div class="page-container pdp-breadcrumb-inner">
+    <div class="page-breadcrumb">
+        <div class="page-container page-breadcrumb-inner">
             <nav class="flex items-center gap-2 text-sm flex-wrap">
                 <a href="<?php echo base_url(); ?>">Home</a>
                 <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
