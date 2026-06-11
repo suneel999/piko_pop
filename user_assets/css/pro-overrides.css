@@ -101,11 +101,11 @@
   }
 
   .site-header-mobile-brand {
-    @apply flex justify-center items-center py-3 border-b border-gray-100;
+    @apply flex justify-center items-center py-3.5 border-b border-gray-100;
   }
 
   .site-header-logo--mobile {
-    @apply h-16 w-auto max-w-[min(280px,78vw)] object-contain;
+    @apply h-20 w-auto max-w-[min(320px,88vw)] object-contain;
   }
 
   .site-header-top {
@@ -862,11 +862,15 @@
     }
 
     .site-header-mobile-brand {
-      @apply py-3.5;
+      @apply py-4;
     }
 
     .site-header-logo--mobile {
-      @apply h-[4.25rem] max-w-[min(300px,82vw)];
+      @apply h-24 max-w-[min(360px,92vw)];
+    }
+
+    .site-header-logo--sm {
+      @apply h-14 max-w-[240px];
     }
 
     .site-header-top {
@@ -883,10 +887,6 @@
 
     .site-header-actions {
       @apply ml-0 gap-1.5;
-    }
-
-    .site-header-logo--sm {
-      @apply h-12 max-w-[220px];
     }
 
     .header-action-pill {
