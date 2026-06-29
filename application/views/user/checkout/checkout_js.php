@@ -6,7 +6,8 @@
 $(document).ready(function() {
     'use strict';
 
-    var razorpayKeyId = '<?php echo $razorpay_key_id; ?>';
+    var razorpayKeyId = '<?php echo htmlspecialchars($razorpay_key_id, ENT_QUOTES, 'UTF-8'); ?>';
+    var razorpayLogoUrl = '<?php echo brand_logo_url(); ?>';
 
     // =====================
     // Address Form Validation
@@ -281,6 +282,11 @@ $(document).ready(function() {
 
         // Check if address is selected
         var selectedAddress = $('#selectedAddressId').val();
+        if (!razorpayKeyId) {
+            toastr.error('Payment gateway is not configured. Please contact support.');
+            return;
+        }
+
         if (!selectedAddress) {
             toastr.warning('Please select a delivery address');
             return;
@@ -310,10 +316,9 @@ $(document).ready(function() {
                         order_id: response.razorpay_order_id,
                         prefill: response.prefill,
                         theme: {
-                            color: '#E53935'
+                            color: '#E91E8C'
                         },
                         handler: function(paymentResponse) {
-                            // Payment successful - verify on server
                             verifyPayment(paymentResponse, response.order_id, $btn, originalHtml);
                         },
                         modal: {
@@ -322,6 +327,10 @@ $(document).ready(function() {
                             }
                         }
                     };
+
+                    if (razorpayLogoUrl) {
+                        options.image = razorpayLogoUrl;
+                    }
 
                     var rzp = new Razorpay(options);
 

@@ -390,6 +390,12 @@ class Checkout extends CI_Controller
 
         $total = $subtotal - $coupon_discount + $shipping;
 
+        $amount_paise = intval(round($total * 100));
+        if ($amount_paise < 100) {
+            echo json_encode(array('status' => 400, 'message' => 'Minimum order amount is ₹1.'));
+            return;
+        }
+
         // Generate order number
         $order_number = 'PP' . date('Ymd') . strtoupper(substr(uniqid(), -6));
 
@@ -444,13 +450,21 @@ class Checkout extends CI_Controller
 
         // Create Razorpay Order
         try {
-            $api = new Api(config_item('razorpay_key_id'), config_item('razorpay_key_secret'));
+            $key_id = config_item('razorpay_key_id');
+            $key_secret = config_item('razorpay_key_secret');
+
+            if (empty($key_id) || empty($key_secret)) {
+                echo json_encode(array('status' => 500, 'message' => 'Payment gateway is not configured. Please contact support.'));
+                return;
+            }
+
+            $api = new Api($key_id, $key_secret);
 
             $razorpay_order = $api->order->create(array(
                 'receipt' => $order_number,
-                'amount' => intval($total * 100), // Razorpay uses paise
+                'amount' => $amount_paise,
                 'currency' => 'INR',
-                'payment_capture' => 1, // Auto-capture payment
+                'payment_capture' => 1,
                 'notes' => array(
                     'order_id' => $order_id,
                     'order_number' => $order_number
@@ -467,18 +481,34 @@ class Checkout extends CI_Controller
 
             echo json_encode(array(
                 'status' => 200,
-                'razorpay_order_id' => $razorpay_order->id,
                 'order_id' => $order_id,
                 'order_number' => $order_number,
-                'amount' => intval($total * 100),
+                'razorpay_order_id' => $razorpay_order->id,
+                'amount' => $amount_paise,
                 'currency' => 'INR',
                 'prefill' => array(
                     'name' => $address->fullname,
                     'email' => $user->email,
                     'contact' => $address->phone
-                )
+                ),
+                'key_id' => $key_id
             ));
 
+        } catch (\Razorpay\Api\Errors\BadRequestError $e) {
+            $this->checkout_model->delete_order_items($order_id);
+            $this->checkout_model->delete_order($order_id);
+
+            log_message('error', 'Razorpay order creation failed (bad request): ' . $e->getMessage());
+
+            $http_status = 500;
+            if (stripos($e->getMessage(), 'authentication') !== false) {
+                $http_status = 401;
+            }
+
+            echo json_encode(array(
+                'status' => $http_status,
+                'message' => 'Payment initialization failed. Please try again.'
+            ));
         } catch (\Exception $e) {
             // Delete the pending order on error
             $this->checkout_model->delete_order_items($order_id);
@@ -488,8 +518,7 @@ class Checkout extends CI_Controller
 
             echo json_encode(array(
                 'status' => 500,
-                'message' => 'Payment initialization failed. Please try again.',
-                'error' => $e->getMessage()
+                'message' => 'Payment initialization failed. Please try again.'
             ));
         }
     }
@@ -538,7 +567,15 @@ class Checkout extends CI_Controller
 
         // Verify signature
         try {
-            $api = new Api(config_item('razorpay_key_id'), config_item('razorpay_key_secret'));
+            $key_id = config_item('razorpay_key_id');
+            $key_secret = config_item('razorpay_key_secret');
+
+            if (empty($key_id) || empty($key_secret)) {
+                echo json_encode(array('status' => 500, 'message' => 'Payment gateway is not configured.'));
+                return;
+            }
+
+            $api = new Api($key_id, $key_secret);
 
             $attributes = array(
                 'razorpay_order_id' => $razorpay_order_id,

@@ -55,6 +55,11 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['admin_root'] = 'admin_root/home';
 $route['web-ship'] = 'webhook/shiprocket';
+$route['webhook/razorpay'] = 'webhook/razorpay';
+
+// Razorpay Standard Checkout API aliases
+$route['api/create-order'] = 'checkout/create_order';
+$route['api/verify-payment'] = 'checkout/verify_payment';
 
 // Product and Category SEO-friendly URLs
 $route['product/(:any)'] = 'shop/product/$1';

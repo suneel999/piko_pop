@@ -33,17 +33,14 @@ $config['shipping_enabled'] = true; //Enable/disable shipping charges
 $config['stripe_publishable_key'] = '****';
 $config['stripe_secret_key'] = '***';
 
-//Razorpay
-// $config['razorpay_key_id'] = 'rzp_test_2otcZJlyPiUnbq';
-// $config['razorpay_key_secret'] = 'MXY49RtG7TCwuviWd2UCXwS0';
+//Razorpay (from .env — never commit secrets)
+$app_env = static function ($key, $default = '') {
+	$value = $_ENV[$key] ?? getenv($key);
+	return ($value !== false && $value !== null && $value !== '') ? $value : $default;
+};
 
-$config['razorpay_key_id'] = '*****';
-$config['razorpay_key_secret'] = '*****';
-
-if ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '10.0.2.2') {
-    $config['razorpay_key_id'] = '***';
-    $config['razorpay_key_secret'] = 'MXY49Rt****';
-}
+$config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '');
+$config['razorpay_key_secret'] = $app_env('RAZORPAY_KEY_SECRET', '');
 
 //Shiprocket
 $config['shiprocket_email'] = 'chanudnaidu025@gmail.com';
