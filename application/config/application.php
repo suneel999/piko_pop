@@ -36,7 +36,10 @@ $config['stripe_secret_key'] = '***';
 //Razorpay (from .env — never commit secrets)
 $app_env = static function ($key, $default = '') {
 	$value = $_ENV[$key] ?? getenv($key);
-	return ($value !== false && $value !== null && $value !== '') ? $value : $default;
+	if ($value === false || $value === null || $value === '') {
+		return $default;
+	}
+	return trim((string) $value);
 };
 
 $config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '');

@@ -427,8 +427,8 @@ class Checkout extends CI_Controller
 
         // Insert order items
         foreach ($cart_items as $item) {
-            $images = json_decode($item->images);
-            $product_image = !empty($images[0]) ? $images[0] : null;
+            $images = json_decode($item->images ?? '[]', true);
+            $product_image = (is_array($images) && !empty($images[0])) ? $images[0] : null;
 
             $order_item = array(
                 'order_id' => $order_id,
@@ -450,11 +450,18 @@ class Checkout extends CI_Controller
 
         // Create Razorpay Order
         try {
-            $key_id = config_item('razorpay_key_id');
-            $key_secret = config_item('razorpay_key_secret');
+            $key_id = trim((string) config_item('razorpay_key_id'));
+            $key_secret = trim((string) config_item('razorpay_key_secret'));
 
-            if (empty($key_id) || empty($key_secret)) {
+            if ($key_id === '' || $key_secret === '') {
+                $this->rollback_pending_order($order_id);
                 echo json_encode(array('status' => 500, 'message' => 'Payment gateway is not configured. Please contact support.'));
+                return;
+            }
+
+            if (!extension_loaded('curl')) {
+                $this->rollback_pending_order($order_id);
+                echo json_encode(array('status' => 500, 'message' => 'Payment gateway requires PHP cURL on the server.'));
                 return;
             }
 
@@ -466,7 +473,7 @@ class Checkout extends CI_Controller
                 'currency' => 'INR',
                 'payment_capture' => 1,
                 'notes' => array(
-                    'order_id' => $order_id,
+                    'order_id' => (string) $order_id,
                     'order_number' => $order_number
                 )
             ));
@@ -478,6 +485,9 @@ class Checkout extends CI_Controller
 
             // Get user info for prefill
             $user = $this->common->getdatabytable('users', array('id' => $user_id));
+            $prefill_email = (!empty($user->email) && filter_var($user->email, FILTER_VALIDATE_EMAIL))
+                ? $user->email
+                : 'customer+' . $address->phone . '@pikopop.in';
 
             echo json_encode(array(
                 'status' => 200,
@@ -488,39 +498,65 @@ class Checkout extends CI_Controller
                 'currency' => 'INR',
                 'prefill' => array(
                     'name' => $address->fullname,
-                    'email' => $user->email,
+                    'email' => $prefill_email,
                     'contact' => $address->phone
                 ),
                 'key_id' => $key_id
             ));
 
         } catch (\Razorpay\Api\Errors\BadRequestError $e) {
-            $this->checkout_model->delete_order_items($order_id);
-            $this->checkout_model->delete_order($order_id);
+            $this->rollback_pending_order($order_id);
 
             log_message('error', 'Razorpay order creation failed (bad request): ' . $e->getMessage());
 
-            $http_status = 500;
-            if (stripos($e->getMessage(), 'authentication') !== false) {
-                $http_status = 401;
-            }
-
             echo json_encode(array(
-                'status' => $http_status,
-                'message' => 'Payment initialization failed. Please try again.'
+                'status' => 500,
+                'message' => $this->razorpay_error_message($e)
             ));
         } catch (\Exception $e) {
-            // Delete the pending order on error
-            $this->checkout_model->delete_order_items($order_id);
-            $this->checkout_model->delete_order($order_id);
+            $this->rollback_pending_order($order_id);
 
             log_message('error', 'Razorpay order creation failed: ' . $e->getMessage());
 
             echo json_encode(array(
                 'status' => 500,
-                'message' => 'Payment initialization failed. Please try again.'
+                'message' => $this->razorpay_error_message($e)
             ));
         }
+    }
+
+    /**
+     * User-safe Razorpay error with extra detail outside production.
+     */
+    private function razorpay_error_message($e)
+    {
+        $raw = $e->getMessage();
+
+        if (stripos($raw, 'authentication') !== false) {
+            if (ENVIRONMENT !== 'production') {
+                return 'Razorpay keys rejected. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in server .env (test keys must match, no quotes or trailing spaces).';
+            }
+            return 'Payment initialization failed. Please try again.';
+        }
+
+        if (ENVIRONMENT !== 'production') {
+            return 'Payment initialization failed: ' . $raw;
+        }
+
+        return 'Payment initialization failed. Please try again.';
+    }
+
+    /**
+     * Remove a pending order if Razorpay setup fails.
+     */
+    private function rollback_pending_order($order_id)
+    {
+        if (empty($order_id)) {
+            return;
+        }
+
+        $this->checkout_model->delete_order_items($order_id);
+        $this->checkout_model->delete_order($order_id);
     }
 
     /**
@@ -567,10 +603,10 @@ class Checkout extends CI_Controller
 
         // Verify signature
         try {
-            $key_id = config_item('razorpay_key_id');
-            $key_secret = config_item('razorpay_key_secret');
+            $key_id = trim((string) config_item('razorpay_key_id'));
+            $key_secret = trim((string) config_item('razorpay_key_secret'));
 
-            if (empty($key_id) || empty($key_secret)) {
+            if ($key_id === '' || $key_secret === '') {
                 echo json_encode(array('status' => 500, 'message' => 'Payment gateway is not configured.'));
                 return;
             }

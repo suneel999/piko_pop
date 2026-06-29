@@ -306,9 +306,10 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.status == 200) {
+                    var checkoutKey = response.key_id || razorpayKeyId;
                     // Open Razorpay checkout
                     var options = {
-                        key: razorpayKeyId,
+                        key: checkoutKey,
                         amount: response.amount,
                         currency: response.currency,
                         name: 'PIKO POP',
@@ -346,9 +347,13 @@ $(document).ready(function() {
                     toastr.error(response.message || 'Failed to create order.');
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 $btn.html(originalHtml).prop('disabled', false);
-                toastr.error('Something went wrong. Please try again.');
+                var msg = 'Something went wrong. Please try again.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                toastr.error(msg);
             }
         });
     });
