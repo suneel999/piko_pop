@@ -42,6 +42,9 @@ $app_env = static function ($key, $default = '') {
 $config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '');
 $config['razorpay_key_secret'] = $app_env('RAZORPAY_KEY_SECRET', '');
 
+$config['otp_bypass_enabled'] = in_array(strtolower((string) $app_env('OTP_BYPASS', 'false')), array('1', 'true', 'yes'), true);
+$config['otp_bypass_code'] = $app_env('OTP_BYPASS_CODE', '123456');
+
 //Shiprocket
 $config['shiprocket_email'] = 'chanudnaidu025@gmail.com';
 $config['shiprocket_password'] = '*****';

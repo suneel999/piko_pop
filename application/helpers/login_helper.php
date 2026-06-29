@@ -380,3 +380,40 @@ function logout_user()
     $CI->session->unset_userdata('user_details');
     $CI->session->sess_destroy();
 }
+
+/**
+ * Whether OTP SMS bypass is enabled (staging / local testing only).
+ */
+function otp_bypass_enabled()
+{
+    return (bool) config_item('otp_bypass_enabled');
+}
+
+/**
+ * Fixed OTP used when bypass mode is enabled.
+ */
+function otp_bypass_code()
+{
+    $code = config_item('otp_bypass_code');
+    return is_string($code) && strlen($code) === 6 ? $code : '123456';
+}
+
+/**
+ * Validate login OTP against stored value or test bypass code.
+ */
+function is_valid_login_otp($input_otp, $stored_otp = null, $expires = null)
+{
+    if (otp_bypass_enabled() && $input_otp === otp_bypass_code()) {
+        return true;
+    }
+
+    if ($stored_otp === null || $stored_otp !== $input_otp) {
+        return false;
+    }
+
+    if (!empty($expires) && strtotime($expires) < time()) {
+        return false;
+    }
+
+    return true;
+}

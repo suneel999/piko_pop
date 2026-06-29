@@ -12,6 +12,11 @@
                     </div>
                     <h1 class="text-2xl font-bold text-dark mb-2">Welcome to PIKO POP!</h1>
                     <p class="text-gray text-sm">Enter your mobile number to start shopping cute things</p>
+                    <?php if (!empty($otp_bypass_enabled)): ?>
+                    <p class="mt-3 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                        Test login: after Get OTP, use <strong><?php echo htmlspecialchars($otp_bypass_code); ?></strong>
+                    </p>
+                    <?php endif; ?>
                 </div>
 
                 <form id="mobileForm" class="space-y-5">
