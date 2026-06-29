@@ -332,6 +332,74 @@ class Checkout extends CI_Controller
     // ==================== RAZORPAY PAYMENT ====================
 
     /**
+     * Staging/local only: verify Razorpay keys load and authenticate (no secrets exposed).
+     * URL: /checkout/razorpay-ping (must be logged in)
+     */
+    public function razorpay_ping()
+    {
+        if (ENVIRONMENT === 'production') {
+            show_404();
+            return;
+        }
+
+        if (!is_loggedin_user()) {
+            echo json_encode(array('status' => 401, 'message' => 'Login required.'));
+            return;
+        }
+
+        $key_id = trim((string) config_item('razorpay_key_id'));
+        $key_secret = trim((string) config_item('razorpay_key_secret'));
+        $env_path = FCPATH . '.env';
+
+        $result = array(
+            'status' => 200,
+            'env_file_exists' => is_readable($env_path),
+            'env_file_path' => $env_path,
+            'key_id_set' => $key_id !== '',
+            'key_id_prefix' => $key_id !== '' ? substr($key_id, 0, 8) : '',
+            'key_id_suffix' => $key_id !== '' ? substr($key_id, -4) : '',
+            'secret_length' => strlen($key_secret),
+            'key_id_format_ok' => (bool) preg_match('/^rzp_(test|live)_[A-Za-z0-9]+$/', $key_id),
+            'razorpay_http' => null,
+            'razorpay_ok' => false,
+            'hint' => '',
+        );
+
+        if ($key_id === '' || $key_secret === '') {
+            $result['status'] = 500;
+            $result['hint'] = 'RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET missing in .env';
+            echo json_encode($result);
+            return;
+        }
+
+        if (!extension_loaded('curl')) {
+            $result['status'] = 500;
+            $result['hint'] = 'PHP cURL extension is not enabled';
+            echo json_encode($result);
+            return;
+        }
+
+        try {
+            $api = new Api($key_id, $key_secret);
+            $order = $api->order->create(array(
+                'amount' => 100,
+                'currency' => 'INR',
+                'receipt' => 'ping' . time(),
+            ));
+            $result['razorpay_http'] = 200;
+            $result['razorpay_ok'] = true;
+            $result['test_order_id'] = $order->id;
+            $result['hint'] = 'Keys are valid. Checkout should work.';
+        } catch (\Exception $e) {
+            $result['status'] = 500;
+            $result['razorpay_http'] = 401;
+            $result['hint'] = 'Razorpay rejected this key pair. Regenerate BOTH keys in Test Mode at dashboard.razorpay.com → Settings → API Keys.';
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
      * Create Razorpay order (AJAX)
      */
     public function create_order()
@@ -534,7 +602,9 @@ class Checkout extends CI_Controller
 
         if (stripos($raw, 'authentication') !== false) {
             if (ENVIRONMENT !== 'production') {
-                return 'Razorpay keys rejected. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in server .env (test keys must match, no quotes or trailing spaces).';
+                $key_id = trim((string) config_item('razorpay_key_id'));
+                $key_hint = strlen($key_id) >= 4 ? (' (loaded Key ID ending …' . substr($key_id, -4) . ')') : '';
+                return 'Razorpay rejected these API keys' . $key_hint . '. Generate a fresh Test Mode pair at dashboard.razorpay.com → Settings → API Keys. Save Key ID and Key Secret together — the secret is shown only once.';
             }
             return 'Payment initialization failed. Please try again.';
         }

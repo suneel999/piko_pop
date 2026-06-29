@@ -60,6 +60,7 @@ $route['webhook/razorpay'] = 'webhook/razorpay';
 // Razorpay Standard Checkout API aliases
 $route['api/create-order'] = 'checkout/create_order';
 $route['api/verify-payment'] = 'checkout/verify_payment';
+$route['checkout/razorpay-ping'] = 'checkout/razorpay_ping';
 
 // Product and Category SEO-friendly URLs
 $route['product/(:any)'] = 'shop/product/$1';

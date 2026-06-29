@@ -4,7 +4,8 @@ date_default_timezone_set('Asia/Kolkata');
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Load environment variables (.env is optional; never commit secrets)
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__);
+// Mutable so values in .env always override stale server/PHP env vars.
+$dotenv = Dotenv\Dotenv::createUnsafeMutable(__DIR__);
 $dotenv->safeLoad();
 /**
  * CodeIgniter

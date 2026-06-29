@@ -42,8 +42,36 @@ $app_env = static function ($key, $default = '') {
 	return trim((string) $value);
 };
 
-$config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '');
-$config['razorpay_key_secret'] = $app_env('RAZORPAY_KEY_SECRET', '');
+$app_env_file = static function ($key) {
+	static $cache = null;
+	if ($cache === null) {
+		$cache = array();
+		$path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . '.env';
+		if (is_readable($path)) {
+			$lines = file($path, FILE_IGNORE_NEW_LINES);
+			if (is_array($lines)) {
+				foreach ($lines as $line) {
+					$line = trim($line);
+					if ($line === '' || $line[0] === '#') {
+						continue;
+					}
+					$eq = strpos($line, '=');
+					if ($eq === false) {
+						continue;
+					}
+					$name = trim(substr($line, 0, $eq));
+					$value = trim(substr($line, $eq + 1));
+					$value = trim($value, " \t\n\r\0\x0B\"'");
+					$cache[$name] = $value;
+				}
+			}
+		}
+	}
+	return isset($cache[$key]) ? $cache[$key] : '';
+};
+
+$config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '') ?: $app_env_file('RAZORPAY_KEY_ID');
+$config['razorpay_key_secret'] = $app_env('RAZORPAY_KEY_SECRET', '') ?: $app_env_file('RAZORPAY_KEY_SECRET');
 
 $config['otp_bypass_enabled'] = in_array(strtolower((string) $app_env('OTP_BYPASS', 'false')), array('1', 'true', 'yes'), true);
 $config['otp_bypass_code'] = $app_env('OTP_BYPASS_CODE', '123456');
