@@ -344,7 +344,7 @@ class Orders extends CI_Controller
 
             // Process Razorpay refund
             try {
-                $api = new Api(config_item('razorpay_key_id'), config_item('razorpay_key_secret'));
+                $api = razorpay_api();
 
                 // Create refund - amount in paise (multiply by 100)
                 $refund = $api->payment->fetch($order->payment_id)->refund(array(

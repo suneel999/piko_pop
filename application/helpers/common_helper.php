@@ -507,3 +507,83 @@ function brand_logo_url($variant = 'default')
 
     return base_url('assets/images/logo.png');
 }
+
+/**
+ * Razorpay Key ID from config (.env).
+ */
+function razorpay_key_id()
+{
+    return trim((string) config_item('razorpay_key_id'));
+}
+
+/**
+ * Razorpay Key Secret from config (.env).
+ */
+function razorpay_key_secret()
+{
+    return trim((string) config_item('razorpay_key_secret'));
+}
+
+/**
+ * Razorpay webhook secret from config (.env), if set in dashboard.
+ */
+function razorpay_webhook_secret()
+{
+    return trim((string) config_item('razorpay_webhook_secret'));
+}
+
+/**
+ * Detect Razorpay mode from Key ID prefix: live, test, or unknown.
+ */
+function razorpay_mode()
+{
+    $key_id = razorpay_key_id();
+    if (strpos($key_id, 'rzp_live_') === 0) {
+        return 'live';
+    }
+    if (strpos($key_id, 'rzp_test_') === 0) {
+        return 'test';
+    }
+    return 'unknown';
+}
+
+function razorpay_is_live()
+{
+    return razorpay_mode() === 'live';
+}
+
+function razorpay_is_test()
+{
+    return razorpay_mode() === 'test';
+}
+
+/**
+ * Validate Razorpay keys before taking payment. Returns error message or null if OK.
+ */
+function validate_razorpay_config()
+{
+    $key_id = razorpay_key_id();
+    $key_secret = razorpay_key_secret();
+
+    if ($key_id === '' || $key_secret === '') {
+        return 'Payment gateway is not configured. Please contact support.';
+    }
+
+    if (!preg_match('/^rzp_(test|live)_[A-Za-z0-9]+$/', $key_id)) {
+        return 'Invalid RAZORPAY_KEY_ID in .env. It must start with rzp_live_ or rzp_test_.';
+    }
+
+    if (ENVIRONMENT === 'production' && razorpay_is_test()) {
+        return 'Test Razorpay keys cannot be used in production. Set live keys (rzp_live_...) in server .env.';
+    }
+
+    return null;
+}
+
+/**
+ * Create a configured Razorpay API client.
+ */
+function razorpay_api()
+{
+    return new Razorpay\Api\Api(razorpay_key_id(), razorpay_key_secret());
+}

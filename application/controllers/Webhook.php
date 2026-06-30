@@ -178,9 +178,24 @@ class Webhook extends CI_Controller
 
         $this->logger->info('Razorpay webhook received', ['body' => $data], 'razorpay');
 
-        // Verify webhook signature if webhook secret is configured
         $headers = $this->input->request_headers();
         $webhook_signature = isset($headers['X-Razorpay-Signature']) ? $headers['X-Razorpay-Signature'] : '';
+        if ($webhook_signature === '' && isset($headers['x-razorpay-signature'])) {
+            $webhook_signature = $headers['x-razorpay-signature'];
+        }
+
+        $webhook_secret = razorpay_webhook_secret();
+        if ($webhook_secret !== '') {
+            try {
+                $api = razorpay_api();
+                $api->utility->verifyWebhookSignature($raw_data, $webhook_signature, $webhook_secret);
+            } catch (\Exception $e) {
+                $this->logger->error('Razorpay webhook signature invalid', ['error' => $e->getMessage()], 'razorpay');
+                http_response_code(400);
+                echo json_encode(array('status' => 400, 'message' => 'Invalid webhook signature'));
+                return;
+            }
+        }
 
         // Process based on event type
         $event = isset($data['event']) ? $data['event'] : '';

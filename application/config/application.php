@@ -72,6 +72,7 @@ $app_env_file = static function ($key) {
 
 $config['razorpay_key_id'] = $app_env('RAZORPAY_KEY_ID', '') ?: $app_env_file('RAZORPAY_KEY_ID');
 $config['razorpay_key_secret'] = $app_env('RAZORPAY_KEY_SECRET', '') ?: $app_env_file('RAZORPAY_KEY_SECRET');
+$config['razorpay_webhook_secret'] = $app_env('RAZORPAY_WEBHOOK_SECRET', '') ?: $app_env_file('RAZORPAY_WEBHOOK_SECRET');
 
 $config['otp_bypass_enabled'] = in_array(strtolower((string) $app_env('OTP_BYPASS', 'false')), array('1', 'true', 'yes'), true);
 $config['otp_bypass_code'] = $app_env('OTP_BYPASS_CODE', '123456');
