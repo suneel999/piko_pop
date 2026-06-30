@@ -43,9 +43,12 @@
                 <i class="fa-solid fa-location-dot w-5 text-center <?php echo $active_page == 'addresses' ? '' : 'text-gray'; ?>"></i>
                 <span>My Addresses</span>
             </a>
-            <a href="<?php echo base_url('wishlist'); ?>" class="flex items-center gap-3 px-5 py-3 text-dark hover:bg-light-gray hover:text-primary transition-all">
-                <i class="fa-solid fa-heart w-5 text-center text-gray"></i>
+            <a href="<?php echo base_url('wishlist'); ?>" class="flex items-center gap-3 px-5 py-3 <?php echo !empty($active_page) && $active_page == 'wishlist' ? 'bg-primary/5 text-primary border-r-4 border-primary font-medium' : 'text-dark hover:bg-light-gray hover:text-primary transition-all'; ?>">
+                <i class="fa-solid fa-heart w-5 text-center <?php echo !empty($active_page) && $active_page == 'wishlist' ? '' : 'text-gray'; ?>"></i>
                 <span>Wishlist</span>
+                <?php if (!empty($wishlist_count) && $wishlist_count > 0): ?>
+                <span class="ml-auto bg-secondary/10 text-secondary text-xs font-semibold px-2 py-0.5 rounded-full"><?php echo $wishlist_count; ?></span>
+                <?php endif; ?>
             </a>
             <div class="border-t border-gray-100 my-2"></div>
             <a href="<?php echo base_url('logout'); ?>" class="flex items-center gap-3 px-5 py-3 text-red-500 hover:bg-red-50 transition-all">

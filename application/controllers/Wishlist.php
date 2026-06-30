@@ -43,6 +43,7 @@ class Wishlist extends CI_Controller
         $this->load->view('user/common/header', $header_data);
         $this->load->view('user/account/wishlist', $data);
         $this->load->view('user/common/footer', $footer_data);
+        $this->load->view('user/account/wishlist_js');
     }
 
     /**
